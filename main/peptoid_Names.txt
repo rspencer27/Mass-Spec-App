@@ -1,0 +1,1 @@
+['Nab', 'Nae', 'Nbsa', 'Nbn', 'Namd', 'Nce', 'Ncm', 'Ncp', 'Ncpr', 'Ndpe','Nfu','Nhe','Nia','Nme','Nmp','Nbu','Npe','Npip','Npp','Ntrp','Ntyr','Nipr','Nph','Nspe','Nime','Npyr', 'Nte','Ndc','Ncpe']

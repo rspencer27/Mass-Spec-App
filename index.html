@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Mass-spec-app by rspencer27</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/rspencer27/Mass-Spec-App">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/rspencer27/Mass-Spec-App/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/rspencer27/Mass-Spec-App/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Mass-spec-app</h1>
+          <p>Ultimate Mass Spec. Calc. + Builder</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/rspencer27">rspencer27</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>
+<a id="-ultimate-awesome-of-awesomeness-mass-spec-calc--builder" class="anchor" href="#-ultimate-awesome-of-awesomeness-mass-spec-calc--builder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a> Ultimate Awesome of Awesomeness Mass Spec. Calc. + Builder</h2>
+
+<h4>
+<a id="-installing-the-mass-spec-calc-app" class="anchor" href="#-installing-the-mass-spec-calc-app" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a> Installing the Mass Spec. Calc. App</h4>
+
+<div>
+        The Ultimate Awesome of Awesome Mass Spec. Calc. is available on either Mac or Windows. To install, download the zip file corresponding to your system and unzip. On PC, double click on massSpecMain.exe to run the program. On Mac, double click the Mass_Spec_App to run.
+</div>
+
+<p><a href="http://dstats.net/download/http://www.chem.uci.edu/%7Ejsnowick/groupweb/mass_spec_calc/Mass_Spec_App_V1_3_mac.zip">Mac Version</a></p>
+
+<p><a href="http://dstats.net/download/http://www.chem.uci.edu/%7Ejsnowick/groupweb/mass_spec_calc/Mass_Spec_App_V1_3_win.zip">Windows Version</a></p>
+
+<p>Developed by Ryan K. Spencer, email <a href="mailto:rspencer@uci.edu?Subject=Mass%20Spec%20App"></a><a href="mailto:rspencer@uci.edu">rspencer@uci.edu</a> or <a href="https://github.com/rspencer27" class="user-mention">@rspencer27</a> regarding questions/comments/bugs.</p>
+
+<div id="section">
+
+        <a id="build_sequence"><h4>
+<a id="-building-a-sequence-" class="anchor" href="#-building-a-sequence-" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a> Building a Sequence </h4></a>
+            <div id="subsection">
+            After running the App you should see the following screen (see below). There are a couple ways to Build a Sequence in the Mass Spec App : using the "Sequence Builder" window or loading the sequence from a text file (see section Save/Load Sequence). To build using the "Sequence Builder" window either click on the "Sequence Builder" button (bottom left of the main window) or select "Sequence Builder" from the "Open Builder" tab at the top of the app.</div>
+            
+![Sequence Builder](http://www.chem.uci.edu/~jsnowick/groupweb/mass_spec_calc/Open_sequence_builder.jpg)
+
+       <div id="blank"> </div>
+       <div> This will open a second window containing all the amino acid and peptoid monomers that are available for building a sequence. You may click on any button to add a residue to a sequence. Sequences are built from N to C termini. You may also add "Custom" buttons for monomers that are not shown in the window (See section Add/Delete Custom Buttons). You can also enter your sequence as a string (ex. MASS SPEC) in the "Enter Sequence" section at the bottom of the window. To delete a single residue from the end of the sequence hit the "Delete Last Residue" button.</div>
+       <div id="blank"> </div>
+       <div id="picture"><img src="http://www.chem.uci.edu/~jsnowick/groupweb/mass_spec_calc/sequence_builder.jpg" width="800" height="auto" alt="Sequence Builder"></div>
+       <div id="blank"> </div>
+       <div> The sequence is automatically updated on the Main Window as buttons are pressed or as the sequence is entered as a string. The main window will display the Molecular Formula, Exact Mass, Molecular Weight, Number of Residues, and Repeats. Choose how the polypeptide was made (synthetic or expressed) to display the correct mass (default displays the C-terminal end as an acid). You may clear the entire sequence by clicking on the "Clear Sequence" button.</div>
+       <div id="blank"> </div>
+       <div id="picture"><img src="main_sequence.jpg" width="800" height="auto" alt="Sequence Builder"></div>
+       <div id="blank"> </div>
+       </div>
+     <div id="section">
+        <a id="save_sequence"><h4>
+<a id="-saveload-a-sequence" class="anchor" href="#-saveload-a-sequence" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a> Save/Load a Sequence.</h4></a>
+    <div id="subsection">
+        To Save or Load a sequence, choose File -&gt; Save Sequence or Load Sequence. The sequence is saved as a simple text file that can be loaded at a later time. You may also load a text file containing your sequence. For natural amino acids you may use single letters (ex. A) or triple letters (ex. Ala). For unnatural amino acids you can use the three or more letter code corresponding to a particular residue (ex. Nce or Phe(I)).
+    </div>
+</div>
+
+<div id="section">
+    <a id="compare_mass"><h4>
+<a id="comparing-mass-spec-data-to-sequence" class="anchor" href="#comparing-mass-spec-data-to-sequence" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Comparing Mass Spec Data to Sequence</h4></a>
+    <div id="subsection">
+    To compare mass spec. data to your sequence simply type the value of the observed peak into the text box above the "Check Mass" button and press the "Check Mass" button. The program will compare the observed mass spec peak to the theoretical mass spec peaks of multiple mass spec adducts. The program is capable of calculating H, Na, and K adducts with multiple charges and combinations as well as oligomers (dimers, trimers, tetramers, etc.). The results are displayed next to "Mass Spec Match". The program also calculates and compares the mass spec you enter to possible addition or deletion adducts, as well as double addition/deltions and single deletion and addition adducts. A quick references of the theoretical peaks for your sequence are displayed at the bottom of the window. </div>
+       <div id="picture"><img src="mass_check.jpg" width="800" height="auto" alt="Compare Mass"></div>
+       <div id="blank"> </div>
+</div>
+
+<div id="section">
+    <a id="custom_buttons"><h4>
+<a id="adddelete-custom-buttons" class="anchor" href="#adddelete-custom-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add/Delete Custom Buttons</h4></a>
+    <div id="subsection">The Mass Spec App comes with over 80 residues/fragments to choose from but there may be residues/fragments that you use that are not listed. To add a custom residue/fragment to the Sequence Builder choose Open Browser - &gt; Add Custom Button. This will generate a second window that will allow you to add custom residues. Type in a desired residue code and the molecular formula of the residue as an acid and free amine. Entries must contain an element and a number (ex. C 1 O 2). Click "Submit Custom Residue" to save the residue. Newly added buttons will appear on the far right side of the Sequence Builder Menu.</div>
+<div><img src="add_residues.jpg" width="800" height="auto" alt="Add Residues"></div>
+<div><img src="custom_button.jpg" width="800" height="auto" alt="Custom Buttons"></div>
+</div>
+
+<div id="section">
+<a id="write_PDB">
+<h4>
+<a id="generate-a-pdb-file-from-a-sequence" class="anchor" href="#generate-a-pdb-file-from-a-sequence" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate a PDB file from a Sequence.</h4></a>
+<div id="subsection"> The Mass Spec App is also capable of generating a "crude" 3D structure based on your sequence. *** *NOTE* The PDB coordinates generated do not reflect ideal angles or bond lenghts, further minimization should be performed in such programs as Pymol or Maestro to obtain more accurate structures.*** You have two basic choices: an alpha-helix or a beta-sheet. Currently all natural amino acids, N-Me amino acids, and unnatural amino acids can be used to generate a PDB structure. Only a few peptoid fragments can currently can be used and may only be used to generate a beta-sheet structure. "Hao" is also limited to a beta-sheet conformation. To generate a PDB select "Write to PDB" -&gt; "Write PDB file". You may select alpha-helix or beta-sheet and enter a starting residue number and a chain letter (default values are 1 and A). Push the "Write Sequence to PDB" to generate the PDB file.
+</div>
+
+<div><img src="write_PDB.jpg" width="800" height="auto" alt="Custom Buttons"></div>
+
+<div>
+<img src="alpha_helix.png" width="400" height="auto" alt="Custom Buttons"><img src="beta_sheet.png" width="400" height="auto" alt="Custom Buttons">
+</div>
+
+<p></p>
+</div>
+
+<div id="section">
+<a id="write_nanosheet">
+<h4>
+<a id="generate-a-nanosheet-pdb-file-from-a-sequence" class="anchor" href="#generate-a-nanosheet-pdb-file-from-a-sequence" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Generate a Nanosheet PDB file from a Sequence.</h4></a>
+<div id="subsection"> The Mass Spec App is also capable of generating a 3D nanosheet based on your sequence. All natural and unnatural amino acids and a few peptoids can be written to a PDB file. To generate a nanosheet select "Write to PDB" -&gt; "What the Sheet?". An additional window will prompt you to enter length, width, distance between layers, and distance between monomer units.
+</div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<p></p>
+</div>
+
+<h3>
+<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+
+<p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+
+<h3>
+<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+
+<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

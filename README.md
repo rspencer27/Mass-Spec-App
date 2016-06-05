@@ -3,7 +3,7 @@ Python code for the Mass Spec App GUI
 
 This is the Python source code for the Mass Spec App currently in developemet. 
 
-Current App calculates the exact mass and molecular weight of a peptide/peptoid sequence. Multiply charged adducts are calculated and compared to user input. Additional information can be found here: http://www.chem.uci.edu/~jsnowick/groupweb/mass_spec_calc/mass_spec.html
+Current App calculates the exact mass and molecular weight of a peptide/peptoid sequence. Multiply charged adducts are calculated and compared to user input. Additional information can be found here: http://rspencer27.github.io/Mass-Spec-App/
 
 Crude models can be written in PDB format directly from the input sequence. Users may output the sequence as an alpha-helix or beta-sheet. **NOTE** not all coordinates are available for PDB generation. 
 

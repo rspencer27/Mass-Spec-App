@@ -223,8 +223,6 @@ class MassSpecApp(object):
 	def check_mass_peak(self):
 			peak = self.check_mass.get()
 			user_peaks.append(peak)
-			print(user_peaks)
-			print (peak)
 			peak = float(peak)
 			if sequence == None:
 				print("Please enter a sequence first")
@@ -312,20 +310,20 @@ class Sequence_Builder(object):
 		
 		label = tk.Label(top,
 								anchor="w", padx=5, pady=5, text="Misc.")
-		label.grid(row=0, column=6)
+		label.grid(row=0, column=7)
 		for i, k in enumerate(misc):
 				button = tk.Button(top, text=k, width=7, relief='raised',
 							command=onclick(k), state=tk.NORMAL)
-				button.grid(row=i+1, padx=5,pady =5,column=6)
+				button.grid(row=i+1, padx=5,pady =5,column=7)
 				keyboardButtons.append(button)
 		
 		label = tk.Label(top,
 								anchor="w", padx=5, pady=5, text="N-Me AA")
-		label.grid(row=0, column=7)
+		label.grid(row=0, column=8)
 		for i, k in enumerate(N_me_AA):
 				button = tk.Button(top, text=k, width=7, relief='raised',
 							command=onclick(k), state=tk.NORMAL)
-				button.grid(row=i+1, padx=5,pady =5,column=7)
+				button.grid(row=i+1, padx=5,pady =5,column=8)
 				keyboardButtons.append(button)
 				
 		
@@ -336,8 +334,10 @@ class Sequence_Builder(object):
 			peptoid_comment1 = peptoid_comments[0:10]
 			peptoid2 = peptoid_names[10:20]
 			peptoid_comment2 = peptoid_comments[10:20]
-			peptoid3 = peptoid_names[20:]
-			peptoid_comment3 = peptoid_comments[20:]
+			peptoid3 = peptoid_names[20:30]
+			peptoid_comment3 = peptoid_comments[20:30]
+			peptoid4 = peptoid_names[30:]
+			peptoid_comment4 = peptoid_comments[30:]
 			label = tk.Label(top,
 								anchor="w", padx=5, pady=5, text="Peptoids")
 			label.grid(row=0, column=3, columnspan=3)
@@ -360,6 +360,12 @@ class Sequence_Builder(object):
 				button.grid(row=i+1, padx=5,pady =5,column=5)
 				keyboardButtons.append(button)
 				balloon.bind(button, peptoid_comment3[i])
+			for i, k in enumerate(peptoid4):
+				button = tk.Button(top, text=k, width=7, relief='raised',
+							command=onclick(k), state=tk.NORMAL)
+				button.grid(row=i+1, padx=5,pady =5,column=6)
+				keyboardButtons.append(button)
+				balloon.bind(button, peptoid_comment4[i])
 		else:
 			pass
 		if os.path.isfile('custom_buttons.txt'):
@@ -373,11 +379,11 @@ class Sequence_Builder(object):
 			else:
 				label = tk.Label(top,
 								anchor="w", padx=5, pady=5, text="Custom")
-				label.grid(row=0, column=8) 
+				label.grid(row=0, column=9) 
 				for i,k in enumerate(custom_names_user):
 					button = tk.Button(top, text=k, width=7, relief='raised',
 								command=onclick(k), state=tk.NORMAL)
-					button.grid(row=i+1, padx=5,pady =5,column=8)
+					button.grid(row=i+1, padx=5,pady =5,column=9)
 					keyboardButtons.append(button)
 				exactMassAA.update(custom_atoms_user)
 		else:
@@ -404,7 +410,6 @@ class buffer_subtract(object):
 		
 	def Sample(self,fname):
 		def sample_sub():
-			print('Clicked Something')
 			if fname == 'Sample':
 				fnameSample = askopenfilename(filetypes=(("dat", "*.dat"),
 														("ndat","*.ndat"),
@@ -475,7 +480,9 @@ class Write_nanosheet(object):
 		label.grid(row = 0, column = 0, columnspan = 2)
 		options=[]
 		Choices = [("Parallel", "para"),
-				   ("Antiparallel", "anti")]
+				   ("Antiparallel", "anti"),
+				   ("Loopoid Anti", "loopoid_anti"),
+				   ("Loopoid Para", "loopoid_para")]
 		sel = StringVar()
 		sel.set("para")
 		i = 0
@@ -522,6 +529,12 @@ class Write_nanosheet(object):
 			elif choice == 'anti':
 				sheet_choice[0]='anti'
 				print('You selected anti')
+			elif choice == 'loopoid_anti':
+				sheet_choice[0]='loopoid_anti'
+				print('You selected loopoid_anti')
+			elif choice == 'loopoid_para':
+				sheet_choice[0]='loopoid_para'
+				print('You selected loopoid_para')
 			elif choice == 'Write Sheet':
 				length=length_strands.get()
 				width=width_strands.get()
@@ -535,6 +548,10 @@ class Write_nanosheet(object):
 					wPdb.what_the_sheet_par(sequence_temp,length,height,width, l_adjust)
 				elif sheet_choice[0] == 'anti':
 					wPdb.what_the_sheet_anti(sequence_temp,length,height,width, l_adjust)
+				elif sheet_choice[0] == 'loopoid_anti':
+					wPdb.what_the_sheet_loopoid_anti(sequence_temp,length,height,width, l_adjust)
+				elif sheet_choice[0] == 'loopoid_para':
+					wPdb.what_the_sheet_loopoid_par(sequence_temp,length,height,width, l_adjust)
 			else:
 				pass
 				
@@ -592,8 +609,8 @@ class Write_to_Pdb(object):
 				print("You selected Beta")
 			elif choice == 'Write PDB':
 				pdb_sequence = ''.join(str(e) for e in sequence_temp[1:])
-				print(start_residue.get())
-				print(chain_ID.get())
+				#print(start_residue.get())
+				#print(chain_ID.get())
 				sr = start_residue.get()
 				if PDB_choice[0] == 'alpha':
 					print("Writing alpha-helix")
@@ -691,10 +708,6 @@ class convert_PDB_to_string(object):
 		fobj.write('\'')
 		fobj.close()
 		openfileobject.close()
-
-class test(object):
-	def __init__(self):
-		pass
 
 class add_custom_buttons(object):
 	'''This is the subprogram that allows you to add additional residue fragments'''
@@ -830,16 +843,6 @@ class add_custom_buttons(object):
 		B1.pack()
 		popup.mainloop()
 		
-class Totally_tubular(object):
-		def __init__(self):
-			top = Toplevel()
-			label = tk.Label(top,
-					anchor = "w", padx=5, pady=5, text="Totally Tubular")
-			
-	
-		
-	
-		
 	
 sequence_temp=['Acid']			
 
@@ -868,7 +871,7 @@ def onclick(k):
 		elif k == 'Convert PDB':
 			convert_PDB_to_string('top')
 		elif k == 'Totally Tubular':
-			wPdb.write_totally_tubular_par(sequence_temp)
+			wPdb.write_totally_tubular_compress(sequence_temp)
 		elif k == 'What the Sheet':
 			Write_nanosheet('top')
 		elif k == 'Enter Sequence':
@@ -1032,6 +1035,6 @@ except:
 
 root = Tk()
 
-app = MassSpecApp(root, title='Mass Spec Calc v1.3')
-root.wm_title("Ultimate Awesome of Awesomeness Mass Spec. Calc. + Builder v1.3")
+app = MassSpecApp(root, title='Mass Spec Calc v1.4')
+root.wm_title("Ultimate Awesome of Awesomeness Mass Spec. Calc. + Builder v1.4")
 root.mainloop()

@@ -66,7 +66,7 @@ class write_Pdb(object):
 						else:
 							temp_coordinate = atom_positions_beta_up.get(m)
 					else:
-						temp_coordinate = peptoid_cis_up.get(m)
+						temp_coordinate = peptoid_cis_flat.get(m)
 					for n,p in enumerate(temp_coordinate):
 						coordinate.append(p)
 					if m == 'CG' and k == 'P':
@@ -99,7 +99,7 @@ class write_Pdb(object):
 						else:
 							temp_coordinate = atom_positions_beta_up.get(m)
 					else:
-						temp_coordinate = peptoid_cis_down.get(m)
+						temp_coordinate = peptoid.get(m)
 					for n,p in enumerate(temp_coordinate):
 						coordinate.append(p)
 					if m == 'N':
@@ -1944,7 +1944,7 @@ class write_Pdb(object):
 		sr = 1
 		Z_spacing = 26
 		number_of_rings = 5
-		repeats = 8
+		repeats = 24
 		compression = -80
 		total_atoms=1
 		tilt=0
@@ -1954,8 +1954,6 @@ class write_Pdb(object):
 		#adjust_rot_2=0.55
 		adjust_rot_1=1
 		adjust_rot_2=1
-		repeat_factor=18
-		rotation_factor=12
 		for q in range(0,number_of_rings):
 			if q%2 == 0:
 				ring_orientation = 1
@@ -1964,7 +1962,7 @@ class write_Pdb(object):
 			for p in range (0, repeats):
 				sr = 1
 				#radius = (3.1 * (len(sequence)-1)*(repeats/4)+(repeats/4))/(2*math.pi)
-				radius = ((2.55 * (len(sequence)-1)*(repeats/4)+(repeats/4))/(2*math.pi))*0.35
+				radius = ((2.55 * (len(sequence)-1)*(6)+(6))/(2*math.pi))*0.35
 				radius_2=radius*1.125
 				#chain_ID = chain[q+p+q*(repeats-1)]
 				chain_ID = ' '
@@ -1976,13 +1974,12 @@ class write_Pdb(object):
 										
 					#rotation_x = -math.sin(((60+p*60)*math.pi)/180)*9 + math.cos(((0+p*60)*math.pi)/180)*9
 					#rotation_y = -math.cos(((60+p*60)*math.pi)/180)*9 - math.sin(((0+p*60)*math.pi)/180)*9
-					#start_pos = (p/2)*(len(sequence)*(3/2))+(24*repeats/24-24)
-					start_pos = (p/2)*(len(sequence)*repeats/repeat_factor)
-					rotation_y = (-math.sin(((60+p*30)*math.pi)/-180)*rotation_factor + math.cos(((0+p*30)*math.pi)/-180)*rotation_factor)*adjust_rot_1
-					rotation_x = (-math.cos(((60+p*30)*math.pi)/-180)*rotation_factor - math.sin(((0+p*30)*math.pi)/-180)*rotation_factor)*adjust_rot_1
-					rotation_y2 = (-math.sin(((60+p*30)*math.pi)/-180)*rotation_factor + math.cos(((0+p*30)*math.pi)/-180)*rotation_factor)*adjust_rot_2
-					rotation_x2 = (-math.cos(((60+p*30)*math.pi)/-180)*rotation_factor - math.sin(((0+p*30)*math.pi)/-180)*rotation_factor)*adjust_rot_2
-					degrees = (360/((len(sequence)-1)*3*(repeats/8)))
+					start_pos = (p/2)*(len(sequence)*3/2)
+					rotation_y = (-math.sin(((60+p*30)*math.pi)/-180)*9 + math.cos(((0+p*30)*math.pi)/-180)*9)*adjust_rot_1
+					rotation_x = (-math.cos(((60+p*30)*math.pi)/-180)*9 - math.sin(((0+p*30)*math.pi)/-180)*9)*adjust_rot_1
+					rotation_y2 = (-math.sin(((60+p*30)*math.pi)/-180)*9 + math.cos(((0+p*30)*math.pi)/-180)*9)*adjust_rot_2
+					rotation_x2 = (-math.cos(((60+p*30)*math.pi)/-180)*9 - math.sin(((0+p*30)*math.pi)/-180)*9)*adjust_rot_2
+					degrees = (360/((len(sequence)-1)*3*(3)))
 					if p > (repeats/2 -1):
 						radius = radius_2
 						#rotation_y = rotation_y2
@@ -2132,13 +2129,12 @@ class write_Pdb(object):
 					start_pos = start_pos/2
 					fobj.write('TER\n')
 				else:
-					rotation_y = (-math.sin(((60+(p-1)*30)*math.pi)/180)*rotation_factor - math.cos(((0+(p-1)*30)*math.pi)/180)*rotation_factor)*adjust_rot_1
-					rotation_x = (-math.cos(((60+(p-1)*30)*math.pi)/180)*rotation_factor + math.sin(((0+(p-1)*30)*math.pi)/180)*rotation_factor)*adjust_rot_1
-					rotation_y2 = (-math.sin(((60+(p-1)*30)*math.pi)/180)*rotation_factor - math.cos(((0+(p-1)*30)*math.pi)/180)*rotation_factor)*adjust_rot_2
-					rotation_x2 = (-math.cos(((60+(p-1)*30)*math.pi)/180)*rotation_factor + math.sin(((0+(p-1)*30)*math.pi)/180)*rotation_factor)*adjust_rot_2
-					#start_pos = (p/2)*(len(sequence)*(3/2))-(len(sequence)*1/8)+(24*repeats/24-24)
-					start_pos = (p/2)*(len(sequence)*repeats/repeat_factor)-(len(sequence)*1/8)
-					degrees = (-360/((len(sequence)-1)*3*(repeats/8)))
+					rotation_y = (-math.sin(((60+(p-1)*30)*math.pi)/180)*9 - math.cos(((0+(p-1)*30)*math.pi)/180)*9)*adjust_rot_1
+					rotation_x = (-math.cos(((60+(p-1)*30)*math.pi)/180)*9 + math.sin(((0+(p-1)*30)*math.pi)/180)*9)*adjust_rot_1
+					rotation_y2 = (-math.sin(((60+(p-1)*30)*math.pi)/180)*9 - math.cos(((0+(p-1)*30)*math.pi)/180)*9)*adjust_rot_2
+					rotation_x2 = (-math.cos(((60+(p-1)*30)*math.pi)/180)*9 + math.sin(((0+(p-1)*30)*math.pi)/180)*9)*adjust_rot_2
+					start_pos = (p/2)*(len(sequence)*3/2)-(len(sequence)*1/8)
+					degrees = (-360/((len(sequence)-1)*3*(3)))
 					if p > (repeats/2-1):
 						radius = radius_2
 						#rotation_x = rotation_x2
@@ -3682,286 +3678,7 @@ class write_Pdb(object):
 					link +=1
 		fobj.write('END')		
 		fobj.close()
-	
-	def what_the_sheet_trans(self,sequence,length,height,width, l_adjust):
-		fname = asksaveasfilename(filetypes=(("pdb", "*.pdb"),
-                                           ("All files", "*.*") ),
-								  defaultextension='.pdb')
-		try:							   
-			fobj = open(fname, 'w')
-		except:
-				pass
-		print(len(sequence))
-		sequence2 = sequence[1:]
-			#residue_count +=1
-		locations = []
-		writePdbAA.update(ipn.get_peptoid_coordinates())
-		locations_temp=[]
-		coordinate=[]
-		coordinate2 = []
-		temp_coordinate=[]
-		total_atoms = 1
-		peptoids = ipn.get_peptoid_names()
-		#peptoid = ipn.get_peptoid_atoms()
-		start_residue = '1'
-		amino_acids = ['Ac','A','R','N','D','C','E','N','G','H','I','L','K','M','F','P','S','T','W', 'Y', 'Q','V',
-						'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Ser', 'Thr', 'Trp', 'Tyr', 'Gln','Val']
-		if start_residue == '':
-			print("Empty residue")
-			resid_num = 1
-			start_residue = 1
-		else:
-			start_residue = int(start_residue)
-			resid_num = int(start_residue)
-		#chain_ID = 'A'
-		#if chain_ID == '':
-		#	chain_ID = 'A'
-		#else:
-		#	pass
-		print(sequence)
-		length_strands = int(length)
-		width_strands = int(width)
-		height_strands = int(height)
-		res_num_temp=1
-		res_num_temp2=1
-		total_chains=1
-		total_chains2=1
-		for r in range(0, width_strands):
-			if r%2 == 0:
-				start_pos = 0
-			else:
-				start_pos = (len(sequence)/2)*3.52+3.80
-			for q in range(0, length_strands):
-				chain_ID = ' '
-				if q == 0:
-					adjust = 0
-				else:
-					adjust = float(l_adjust)*q
-				print(adjust)
-				for i,k in enumerate(sequence2):
-					res_name = writePdbAA.get(k)['Res_name']
-			
-					atoms = writePdbAA.get(k)['atoms']
-			
-					atom_type = writePdbAA.get(k)['atom_type']
-					sr = start_residue + i
-					if i%2 == 0:
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_trans_up.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							if m == 'CG' and k == 'P':
-								coordinate[0] = 1.221
-								coordinate[1] = 0.000
-								coordinate[2] = 1.921
-							elif m == 'CD' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = -0.870
-								coordinate[2] = 1.521
-							else:
-								pass
-							if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
-								res_num_temp = 1
-								coordinate[0] = coordinate[0] + res_num_temp*3.50+ adjust+start_pos
-							else:
-								coordinate[0] = coordinate[0] + res_num_temp*3.50+ adjust+start_pos
-							coordinate[2] = coordinate[2] + r*4
-							print(res_num_temp)
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							del coordinate[:]
-							total_atoms+=1
-					else:
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_trans_down.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							print(k)
-							#if m == 'N':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 1.121
-							#elif m == 'CA':
-							#	coordinate[1] = 0.000
-							#elif m == 'C':
-							#	coordinate[1] = 1.121
-							#elif m == 'O':
-							#	coordinate[1] = 2.141
-							#elif m == 'CG' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = -0.870
-							#	coordinate[2] = -1.521
-							#elif m == 'CD' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 0.870
-							#	coordinate[2] = -1.521
-							#else:
-							#	coordinate[1] = coordinate[1]*(-1) + 1.170
-							#	coordinate[2] = coordinate[2]*(-1)
-							if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
-								res_num_temp = 1
-								coordinate[0] = coordinate[0] + (res_num_temp-1)*3.50+ adjust+start_pos
-							else:
-								coordinate[0] = coordinate[0] + (res_num_temp-1)*3.50+ adjust+start_pos
-							coordinate[2] = coordinate[2] + r*4
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							del coordinate[:]
-							total_atoms+=1
-					if k == 'Hao':
-						resid_num +=3
-					else:
-						resid_num +=1
-						res_num_temp +=1
-				total_atoms2 = 0
-				total_chains+=1
-				for i,k in enumerate(sequence2):
-					res_name = writePdbAA.get(k)['Res_name']
-			
-					atoms = writePdbAA.get(k)['atoms']
-			
-					atom_type = writePdbAA.get(k)['atom_type']
-					sr = start_residue + i
-					if i%2 != 0:
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_trans_up.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							if m == 'CG' and k == 'P':
-								coordinate[0] = 1.221
-								coordinate[1] = 0.000
-								coordinate[2] = 1.921
-							elif m == 'CD' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = -0.870
-								coordinate[2] = 1.521
-							else:
-								pass
-							if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-								res_num_temp2 = 1
-								coordinate[0] = coordinate[0] + res_num_temp2*3.675+ adjust+start_pos
-							else:
-								coordinate[0] = coordinate[0] + res_num_temp2*3.675+ adjust+start_pos
-							coordinate[1] = coordinate[1] + height_strands
-							coordinate[2] = coordinate[2] + r*4
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							del coordinate[:]
-							total_atoms+=1
-					else:
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_trans_down.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							print(k)
-							#if m == 'N':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 1.121
-							#elif m == 'CA':
-							#	coordinate[1] = 0.000
-							#elif m == 'C':
-							#	coordinate[1] = 1.121
-							#elif m == 'O':
-							#	coordinate[1] = 2.141
-							#elif m == 'CG' and k == 'P':
-							#	coordinate[0] = 0.000
-						#		coordinate[1] = -0.870
-						#		coordinate[2] = -1.521
-						#	elif m == 'CD' and k == 'P':
-						#		coordinate[0] = 0.000
-						#		coordinate[1] = 0.870
-						#		coordinate[2] = -1.521
-						#	else:
-								#coordinate[1] = coordinate[1]*(-1) + 1.170
-								#coordinate[2] = coordinate[2]*(-1)
-							if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-								res_num_temp2 = 1
-								coordinate[0] = coordinate[0] + res_num_temp2*3.675+ adjust+start_pos
-							else:
-								coordinate[0] = coordinate[0] + res_num_temp2*3.675+ adjust+start_pos
-							coordinate[1] = coordinate[1] + height_strands
-							coordinate[2] = coordinate[2] + r*4
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							del coordinate[:]
-							total_atoms+=1
-						
-					if k == 'Hao':
-						resid_num +=3
-					else:
-						resid_num +=1
-						res_num_temp2 +=1
-				total_atoms2 = 0
-				total_chains2+=1
-		for q in range(0, length_strands*2*width_strands):
-			link = 0
-			for start,res in enumerate(sequence2):
-				atoms2 = writePdbAA.get(res)['atoms']
-				if res not in amino_acids:
-					link_rec = writePdbAA.get(res)['link_rec']
-					for x,y in enumerate(link_rec):
-						if len(y) > 2:
-							link1 = y[0] + total_atoms2
-							link2 = y[1] + total_atoms2
-							link3 = y[2] + total_atoms2
-							fobj.write('CONECT' + str(link1).rjust(5,' ') + str(link2).rjust(5, ' ') + str(link3).rjust(5, ' ') +'\n')
-						else:
-							link1 = y[0] + total_atoms2
-							link2 = y[1] + total_atoms2
-							fobj.write('CONECT' + str(link1).rjust(5,' ') + str(link2).rjust(5, ' ') + '\n')
-					if link < (len(sequence2)-1):
-						fobj.write('CONECT' + str(total_atoms2 + 3).rjust(5,' ') + str(total_atoms2 + len(atoms2)+1).rjust(5, ' ') + '\n')
-						link +=1
-					else:
-						pass
-					total_atoms2 = total_atoms2 + len(atoms2)
-					print(total_atoms2)
-				else:
-					total_atoms2 = total_atoms2 + len(atoms2)
-					link +=1
-		fobj.write('END')		
-		fobj.close()
-	
-	
+		
 	def what_the_sheet_cis_par(self,sequence,length,height,width, l_adjust):
 		fname = asksaveasfilename(filetypes=(("pdb", "*.pdb"),
                                            ("All files", "*.*") ),
@@ -4258,9 +3975,7 @@ class write_Pdb(object):
 		coordinate=[]
 		coordinate2 = []
 		temp_coordinate=[]
-		sheet_spacing = 29
 		total_atoms = 1
-		stacks=1
 		peptoids = ipn.get_peptoid_names()
 		#peptoid = ipn.get_peptoid_atoms()
 		start_residue = '1'
@@ -4287,27 +4002,26 @@ class write_Pdb(object):
 		total_chains2=1
 		trans_residues = 0
 		trans = 100 - int(percent_trans)
-		for h in range(0,stacks):
-			for r in range(0, width_strands):
-				if r%2 == 0:
-					start_pos = 0 
+		for r in range(0, width_strands):
+			if r%2 == 0:
+				start_pos = 0 
+			else:
+				start_pos = (len(sequence)/2)*2.900+2.90
+			for q in range(0, length_strands):
+				chain_ID = ' '
+				if q == 0:
+					adjust = 0
 				else:
-					start_pos = (len(sequence)/2)*2.900+2.90
-				for q in range(0, length_strands):
-					chain_ID = ' '
-					if q == 0:
-						adjust = 0
-					else:
-						#adjust = float(l_adjust)*q
-						adjust=0
-					for i,k in enumerate(sequence2):
-						res_name = writePdbAA.get(k)['Res_name']
-				
-						atoms = writePdbAA.get(k)['atoms']
+					#adjust = float(l_adjust)*q
+					adjust=0
+				for i,k in enumerate(sequence2):
+					res_name = writePdbAA.get(k)['Res_name']
 			
-						atom_type = writePdbAA.get(k)['atom_type']
-						sr = start_residue + i
-						if i%2 == 0:
+					atoms = writePdbAA.get(k)['atoms']
+			
+					atom_type = writePdbAA.get(k)['atom_type']
+					sr = start_residue + i
+					if i%2 == 0:
 						#if i == 12:
 						#check = random.randint(0, 100)
 						#if check < trans:
@@ -4315,26 +4029,26 @@ class write_Pdb(object):
 						#	peptoid_coord = peptoid_cis_up_2
 						#	trans_residues +=1
 						#else:
-							peptoid_coord = peptoid_cis_up
+						peptoid_coord = peptoid_cis_up
 						#else:
 						#		peptoid_coord = peptoid_cis_up
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_up.get(m)
+						for l,m in enumerate(atoms):
+							if k not in peptoids:
+								if k == 'Hao':
+									temp_coordinate = hao.get(m)
 								else:
-									temp_coordinate = peptoid_coord.get(m)
-									print(k)
-									if k == 'Nseh' and m == 'CG2':
-										print(temp_coordinate)
-										temp_coordinate = [3.743 ,  -1.841 , -2.766] 
-										print('Changing Nseh')
-										print(temp_coordinate)
+									temp_coordinate = atom_positions_beta_up.get(m)
+							else:
+								temp_coordinate = peptoid_coord.get(m)
+								print(k)
+								if k == 'Nseh' and m == 'CG2':
+									print(temp_coordinate)
+									temp_coordinate = [3.743 ,  -1.841 , -2.766] 
+									print('Changing Nseh')
+									print(temp_coordinate)
 									
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
+							for n,p in enumerate(temp_coordinate):
+								coordinate.append(p)
 							#if m == 'CG' and k == 'P':
 							#	coordinate[0] = 1.221
 							#	coordinate[1] = 0.000
@@ -4345,47 +4059,47 @@ class write_Pdb(object):
 							#	coordinate[2] = 1.521
 							#else:
 							#	pass
-								if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
-									res_num_temp = 1
-									coordinate[0] = coordinate[0] + (res_num_temp)*2.900+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp)*2.900+start_pos
-								coordinate[1] = coordinate[1] + r*4.5
-								coordinate[2] = coordinate[2] + h*sheet_spacing
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								del coordinate[:]
-								total_atoms+=1
-						else:
+							if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
+								res_num_temp = 1
+								coordinate[0] = coordinate[0] + (res_num_temp)*2.900+start_pos
+							else:
+								coordinate[0] = coordinate[0] + (res_num_temp)*2.900+start_pos
+							coordinate[1] = coordinate[1] + r*4.5
+							coordinate[2] = coordinate[2]
+							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
+								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
+							elif k not in amino_acids:
+								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
+							else:
+								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
+							del coordinate[:]
+							total_atoms+=1
+					else:
 						#if i ==13:
-							check = random.randint(0, 100)
+						check = random.randint(0, 100)
 						#if check < trans:
 						#	print("Placing cis amide at residue " + k)
 						#	peptoid_coord = peptoid_cis_down_2
 						#	trans_residues +=1
 						#else:
-							peptoid_coord = peptoid_cis_down
+						peptoid_coord = peptoid_cis_down
 						#else:
 						#	peptoid_coord = peptoid_cis_down
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_down.get(m)
+						for l,m in enumerate(atoms):
+							if k not in peptoids:
+								if k == 'Hao':
+									temp_coordinate = hao.get(m)
 								else:
-									temp_coordinate = peptoid_coord.get(m)
-									if k == 'Nseh' and m == 'CG2':
-										print(temp_coordinate)
-										temp_coordinate = [7.103, 1.773, 4.836] 
-										print('Changing Nseh')
-										print(temp_coordinate)
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
+									temp_coordinate = atom_positions_beta_down.get(m)
+							else:
+								temp_coordinate = peptoid_coord.get(m)
+								if k == 'Nseh' and m == 'CG2':
+									print(temp_coordinate)
+									temp_coordinate = [7.103, 1.773, 4.836] 
+									print('Changing Nseh')
+									print(temp_coordinate)
+							for n,p in enumerate(temp_coordinate):
+								coordinate.append(p)
 							#if m == 'N':
 							#	coordinate[0] = 0.000
 							#	coordinate[1] = 1.450
@@ -4406,56 +4120,56 @@ class write_Pdb(object):
 							#else:
 							#	coordinate[1] = coordinate[1]*(-1) + 1.450
 							#	coordinate[2] = coordinate[2]*(-1)
-								if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
-									res_num_temp = 1
-									coordinate[0] = coordinate[0] + (res_num_temp-1)*2.900+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp-1)*2.900+start_pos
-								coordinate[1] = coordinate[1] + r*4.5
-								coordinate[2] = coordinate[2] + h*sheet_spacing
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(	res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								del coordinate[:]
-								total_atoms+=1
-						if k == 'Hao':
-							resid_num +=3
-						else:
-							resid_num +=1
-							res_num_temp +=1
-					total_atoms2 = 0
-					total_chains+=1
-					for i,k in enumerate(sequence2):
-						res_name = writePdbAA.get(k)['Res_name']
+							if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
+								res_num_temp = 1
+								coordinate[0] = coordinate[0] + (res_num_temp-1)*2.900+start_pos
+							else:
+								coordinate[0] = coordinate[0] + (res_num_temp-1)*2.900+start_pos
+							coordinate[1] = coordinate[1] + r*4.5
+							coordinate[2] = coordinate[2]
+							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
+								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
+							elif k not in amino_acids:
+								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
+							else:
+								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
+							del coordinate[:]
+							total_atoms+=1
+					if k == 'Hao':
+						resid_num +=3
+					else:
+						resid_num +=1
+						res_num_temp +=1
+				total_atoms2 = 0
+				total_chains+=1
+				for i,k in enumerate(sequence2):
+					res_name = writePdbAA.get(k)['Res_name']
 			
-						atoms = writePdbAA.get(k)['atoms']
+					atoms = writePdbAA.get(k)['atoms']
 			
-						atom_type = writePdbAA.get(k)['atom_type']
-						sr = start_residue + i
-						if i%2 != 0:
+					atom_type = writePdbAA.get(k)['atom_type']
+					sr = start_residue + i
+					if i%2 != 0:
 						#if i == 13:
-							check = random.randint(0, 100)
+						check = random.randint(0, 100)
 						#if check < trans:
 						#	print("Placing Trans amide at residue " + k)
 						#	peptoid_coord = peptoid_cis_down_2
 						#	trans_residues+=1
 						#else:
-							peptoid_coord = peptoid_cis_down
+						peptoid_coord = peptoid_cis_down
 						#else:
 						#	peptoid_coord = peptoid_cis_down
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_up.get(m)
+						for l,m in enumerate(atoms):
+							if k not in peptoids:
+								if k == 'Hao':
+									temp_coordinate = hao.get(m)
 								else:
-									temp_coordinate = peptoid_coord.get(m)
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
+									temp_coordinate = atom_positions_beta_up.get(m)
+							else:
+								temp_coordinate = peptoid_coord.get(m)
+							for n,p in enumerate(temp_coordinate):
+								coordinate.append(p)
 							#if m == 'CG' and k == 'P':
 							#	coordinate[0] = 1.221
 							#	coordinate[1] = 0.000
@@ -4466,42 +4180,42 @@ class write_Pdb(object):
 							#	coordinate[2] = 1.521
 							#else:
 							#	pass
-								if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-									res_num_temp2 = 1
-									coordinate[0] = coordinate[0] + (res_num_temp2-1)*2.900+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp2-1)*2.900+start_pos
-									coordinate[2] = coordinate[2]*-1 + height_strands + h*sheet_spacing
-									coordinate[1] = coordinate[1]*-1 + r*4.5
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								del coordinate[:]
-								total_atoms+=1
-						else:
+							if res_num_temp2 ==((len(sequence2)*length_strands)+1):
+								res_num_temp2 = 1
+								coordinate[0] = coordinate[0] + (res_num_temp2-1)*2.900+start_pos
+							else:
+								coordinate[0] = coordinate[0] + (res_num_temp2-1)*2.900+start_pos
+							coordinate[2] = coordinate[2]*-1 + height_strands
+							coordinate[1] = coordinate[1]*-1 + r*4.5
+							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
+								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
+							elif k not in amino_acids:
+								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
+							else:
+								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
+							del coordinate[:]
+							total_atoms+=1
+					else:
 						#if i == 12:
-							check = random.randint(0, 100)
+						check = random.randint(0, 100)
 						#if check < trans:
 						#	print("Placing Trans amide at residue " + k)
 						#	peptoid_coord = peptoid_cis_up_2
 						#	trans_residues+=1
 						#else:
-							peptoid_coord =  peptoid_cis_up
+						peptoid_coord =  peptoid_cis_up
 						#else:
 						#	peptoid_coord =  peptoid_cis_up
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_up.get(m)
+						for l,m in enumerate(atoms):
+							if k not in peptoids:
+								if k == 'Hao':
+									temp_coordinate = hao.get(m)
 								else:
-									temp_coordinate = peptoid_coord.get(m)
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
+									temp_coordinate = atom_positions_beta_up.get(m)
+							else:
+								temp_coordinate = peptoid_coord.get(m)
+							for n,p in enumerate(temp_coordinate):
+								coordinate.append(p)
 							#if m == 'N':
 							#	coordinate[0] = 0.000
 							#	coordinate[1] = 1.450
@@ -4522,29 +4236,29 @@ class write_Pdb(object):
 							#else:
 							#	coordinate[1] = coordinate[1]*(-1) + 1.450
 							#	coordinate[2] = coordinate[2]*(-1)
-								if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-									res_num_temp2 = 1
-									coordinate[0] = coordinate[0] + (res_num_temp2)*2.900+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp2)*2.900+start_pos
-								coordinate[2] = coordinate[2]*-1 + height_strands + h*sheet_spacing
-								coordinate[1] = coordinate[1]*-1 + r*4.5
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								del coordinate[:]
-								total_atoms+=1
+							if res_num_temp2 ==((len(sequence2)*length_strands)+1):
+								res_num_temp2 = 1
+								coordinate[0] = coordinate[0] + (res_num_temp2)*2.900+start_pos
+							else:
+								coordinate[0] = coordinate[0] + (res_num_temp2)*2.900+start_pos
+							coordinate[2] = coordinate[2]*-1 + height_strands
+							coordinate[1] = coordinate[1]*-1 + r*4.5
+							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
+								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
+							elif k not in amino_acids:
+								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
+							else:
+								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
+							del coordinate[:]
+							total_atoms+=1
 						
-						if k == 'Hao':
-							resid_num +=3
-						else:
-							resid_num +=1
-							res_num_temp2 +=1
-					total_atoms2 = 0
-					total_chains2+=1
+					if k == 'Hao':
+						resid_num +=3
+					else:
+						resid_num +=1
+						res_num_temp2 +=1
+				total_atoms2 = 0
+				total_chains2+=1
 		print("Total trans residues " + str(trans_residues))
 		for q in range(0, length_strands*2*width_strands):
 			link = 0
@@ -5738,719 +5452,4 @@ class write_Pdb(object):
 		fobj.write('END')		
 		fobj.close()
 			
-	def what_the_sheet_loopoid_par_2_1(self,sequence,length,height,width, l_adjust):
-		fname = asksaveasfilename(filetypes=(("pdb", "*.pdb"),
-                                           ("All files", "*.*") ),
-								  defaultextension='.pdb')
-		try:							   
-			fobj = open(fname, 'w')
-		except:
-				pass
-		print(len(sequence))
-		sequence2 = sequence[1:]
-			#residue_count +=1
-		locations = []
-		writePdbAA.update(ipn.get_peptoid_coordinates())
-		locations_temp=[]
-		coordinate=[]
-		coordinate2 = []
-		temp_coordinate=[]
-		total_atoms = 1
-		peptoids = ipn.get_peptoid_names()
-		start_residue = '1'
-		amino_acids = ['Ac','A','R','N','D','C','E','N','G','H','I','L','K','M','F','P','S','T','W', 'Y', 'Q','V',
-						'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Ser', 'Thr', 'Trp', 'Tyr', 'Gln','Val']
-		if start_residue == '':
-			print("Empty residue")
-			resid_num = 1
-			start_residue = 1
-		else:
-			start_residue = int(start_residue)
-			resid_num = int(start_residue)
-		#chain_ID = 'A'
-		#if chain_ID == '':
-		#	chain_ID = 'A'
-		#else:
-		#	pass
-		print(sequence)
-		length_strands = int(length)
-		width_strands = int(width)
-		height_strands = int(height)
-		res_num_temp=1
-		res_num_temp2=1
-		total_chains=1
-		total_chains2=1
-		for r in range(0, width_strands):
-			if r%2 == 0:
-				start_pos = 0
-			else:
-				start_pos = ((len(sequence)-6)/2)*3.52+3.80
-			for q in range(0, length_strands):
-				chain_ID = ' '
-				if q == 0:
-					adjust = 0
-				else:
-					adjust = float(l_adjust)*q
-				print(adjust)
-				for i,k in enumerate(sequence2):
-					res_name = writePdbAA.get(k)['Res_name']
-			
-					atoms = writePdbAA.get(k)['atoms']
-			
-					atom_type = writePdbAA.get(k)['atom_type']
-					sr = start_residue + i
-					if i%2 == 0:
-						peptoid_coord = peptoid_cis_down
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_coord.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							if m == 'CG' and k == 'P':
-								coordinate[0] = 1.221
-								coordinate[1] = 0.000
-								coordinate[2] = 1.921
-							elif m == 'CD' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = -0.870
-								coordinate[2] = 1.521
-							else:
-								pass
-							if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
-								res_num_temp = 1
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*q)*2.5+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*(q-1))*2.5+ adjust+start_pos
-							else:
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*q)*2.5+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*(q-1))*2.5+ adjust+start_pos
-							coordinate[2] = coordinate[2] + r*4
-							if i>13:
-								print("Found Loop Region")
-								if i<20:
-									coordinate[1] = coordinate[1] -10
-								else:
-									pass
-							else:
-								pass
-							print(res_num_temp)
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4,' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4,' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							del coordinate[:]
-							total_atoms+=1
-					else:
-						peptoid_coord = peptoid_cis_up
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_coord.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							print(k)
-							if m == 'N':
-								coordinate[0] = 0.000
-								coordinate[1] = 1.121
-							elif m == 'CA':
-								coordinate[1] = 0.000
-							elif m == 'C':
-								coordinate[1] = 1.121
-							elif m == 'O':
-								coordinate[1] = 2.141
-							elif m == 'CG' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = -0.870
-								coordinate[2] = -1.521
-							elif m == 'CD' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = 0.870
-								coordinate[2] = -1.521
-							else:
-								coordinate[1] = coordinate[1]*(-1) + 1.170
-								coordinate[2] = coordinate[2]*(-1)
-							if (resid_num-1)%((len(sequence2)*length_strands)) == 0:
-								res_num_temp = 1
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*q)*2.5+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*(q-1))*2.5+ adjust+start_pos
-							else:
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*q)*2.5+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp-6*(q-1))*2.5+ adjust+start_pos
-							coordinate[2] = coordinate[2] + r*4
-							if i>13:
-								print("Found Loop Region")
-								if i<20:
-									coordinate[1] = coordinate[1] -10
-								else:
-									pass
-							else:
-								pass
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-							del coordinate[:]
-							total_atoms+=1
-					if k == 'Hao':
-						resid_num +=3
-					else:
-						resid_num +=1
-						res_num_temp +=1
-				total_atoms2 = 0
-				total_chains+=1
-				for i,k in enumerate(sequence2):
-					res_name = writePdbAA.get(k)['Res_name']
-			
-					atoms = writePdbAA.get(k)['atoms']
-			
-					atom_type = writePdbAA.get(k)['atom_type']
-					sr = start_residue + i
-					if i%2 != 0:
-						peptoid_coord = peptoid_cis_up
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_coord.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							if m == 'CG' and k == 'P':
-								coordinate[0] = 1.221
-								coordinate[1] = 0.000
-								coordinate[2] = 1.921
-							elif m == 'CD' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = -0.870
-								coordinate[2] = 1.521
-							else:
-								pass
-							if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-								res_num_temp2 = 1
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*q)*3.675+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*(q-1))*3.675+ adjust+start_pos
-							else:
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*q)*3.675+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*(q-1))*3.675+ adjust+start_pos
-							if i>13:
-								print("Found Loop Region")
-								if i<20:
-									coordinate[1] = coordinate[1] + height_strands +10
-								else:
-									coordinate[1] = coordinate[1] + height_strands
-							else:
-								coordinate[1] = coordinate[1] + height_strands
-							coordinate[2] = coordinate[2] + r*4
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							del coordinate[:]
-							total_atoms+=1
-					else:
-						peptoid_coord = peptoid_cis_down
-						for l,m in enumerate(atoms):
-							if k not in peptoids:
-								if k == 'Hao':
-									temp_coordinate = hao.get(m)
-								else:
-									temp_coordinate = atom_positions_beta_up.get(m)
-							else:
-								temp_coordinate = peptoid_coord.get(m)
-							for n,p in enumerate(temp_coordinate):
-								coordinate.append(p)
-							print(k)
-							if m == 'N':
-								coordinate[0] = 0.000
-								coordinate[1] = 1.121
-							elif m == 'CA':
-								coordinate[1] = 0.000
-							elif m == 'C':
-								coordinate[1] = 1.121
-							elif m == 'O':
-								coordinate[1] = 2.141
-							elif m == 'CG' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = -0.870
-								coordinate[2] = -1.521
-							elif m == 'CD' and k == 'P':
-								coordinate[0] = 0.000
-								coordinate[1] = 0.870
-								coordinate[2] = -1.521
-							else:
-								coordinate[1] = coordinate[1]*(-1) + 1.170
-								coordinate[2] = coordinate[2]*(-1)
-							if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-								res_num_temp2 = 1
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*q)*3.675+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*(q-1))*3.675+ adjust+start_pos
-							else:
-								if i>19:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*q)*3.675+ adjust+start_pos
-								else:
-									coordinate[0] = coordinate[0] + (res_num_temp2-6*(q-1))*3.675+ adjust+start_pos
-							if i>13:
-								print("Found Loop Region")
-								if i<20:
-									coordinate[1] = coordinate[1] + height_strands +10
-								else:
-									coordinate[1] = coordinate[1] + height_strands
-							else:
-								coordinate[1] = coordinate[1] + height_strands
-							coordinate[2] = coordinate[2] + r*4
-							if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-								fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-							elif k not in amino_acids:
-								fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							else:
-								fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-							del coordinate[:]
-							total_atoms+=1
-						
-					if k == 'Hao':
-						resid_num +=3
-					else:
-						resid_num +=1
-						res_num_temp2 +=1
-				total_atoms2 = 0
-				total_chains2+=1
-		for q in range(0, length_strands*2*width_strands):
-			link = 0
-			for start,res in enumerate(sequence2):
-				atoms2 = writePdbAA.get(res)['atoms']
-				if res not in amino_acids:
-					link_rec = writePdbAA.get(res)['link_rec']
-					for x,y in enumerate(link_rec):
-						if len(y) > 2:
-							link1 = y[0] + total_atoms2
-							link2 = y[1] + total_atoms2
-							link3 = y[2] + total_atoms2
-							fobj.write('CONECT' + str(link1).rjust(5,' ') + str(link2).rjust(5, ' ') + str(link3).rjust(5, ' ') +'\n')
-						else:
-							link1 = y[0] + total_atoms2
-							link2 = y[1] + total_atoms2
-							fobj.write('CONECT' + str(link1).rjust(5,' ') + str(link2).rjust(5, ' ') + '\n')
-					if link < (len(sequence2)-1):
-						fobj.write('CONECT' + str(total_atoms2 + 3).rjust(5,' ') + str(total_atoms2 + len(atoms2)+1).rjust(5, ' ') + '\n')
-						link +=1
-					else:
-						pass
-					total_atoms2 = total_atoms2 + len(atoms2)
-					print(total_atoms2)
-				else:
-					total_atoms2 = total_atoms2 + len(atoms2)
-					link +=1
-		fobj.write('END')		
-		fobj.close()
-		
-	def what_the_sheet_loopoid_par_2(self,sequence,length,height,width, l_adjust):
-		fname = asksaveasfilename(filetypes=(("pdb", "*.pdb"),
-                                           ("All files", "*.*") ),
-								  defaultextension='.pdb')
-		try:							   
-			fobj = open(fname, 'w')
-		except:
-				pass
-		#print(len(sequence))
-		sequence2 = sequence[1:]
-			#residue_count +=1
-		print(sequence2)
-		locations = []
-		writePdbAA.update(ipn.get_peptoid_coordinates())
-		locations_temp=[]
-		coordinate=[]
-		coordinate2 = []
-		temp_coordinate=[]
-		sheet_spacing = 29
-		total_atoms = 1
-		stacks=1
-		peptoids = ipn.get_peptoid_names()
-		#peptoid = ipn.get_peptoid_atoms()
-		start_residue = '1'
-		amino_acids = ['Ac','A','R','N','D','C','E','N','G','H','I','L','K','M','F','P','S','T','W', 'Y', 'Q','V',
-						'Ala', 'Arg', 'Asn', 'Asp', 'Cys', 'Glu', 'Gly', 'His', 'Ile', 'Leu', 'Lys', 'Met', 'Phe', 'Ser', 'Thr', 'Trp', 'Tyr', 'Gln','Val']
-		if start_residue == '':
-			print("Empty residue")
-			resid_num = 1
-			start_residue = 1
-		else:
-			start_residue = int(start_residue)
-			resid_num = int(start_residue)
-		#chain_ID = 'A'
-		#if chain_ID == '':
-		#	chain_ID = 'A'
-		#else:
-		#	pass
-		length_strands = int(length)
-		width_strands = int(width)
-		height_strands = int(height)
-		res_num_temp=1
-		res_num_temp2=1
-		total_chains=1
-		total_chains2=1
-		trans_residues = 0
-		loop_first=18
-		loop_last=24
-		for h in range(0,stacks):
-			for r in range(0, width_strands):
-				if r%2 == 0:
-					start_pos = 0 
-				else:
-					start_pos = ((len(sequence)-6)/2)*2.900+2.90
-				for q in range(0, length_strands):
-					chain_ID = ' '
-					if q == 0:
-						adjust = 0
-					else:
-						#adjust = float(l_adjust)*q
-						adjust=0
-					for i,k in enumerate(sequence2):
-						res_name = writePdbAA.get(k)['Res_name']
-				
-						atoms = writePdbAA.get(k)['atoms']
-			
-						atom_type = writePdbAA.get(k)['atom_type']
-						sr = start_residue + i
-						if i%2 == 0:
-						#if i == 12:
-						#check = random.randint(0, 100)
-						#if check < trans:
-						#	print("Placing Cis amide at residue " + k)
-						#	peptoid_coord = peptoid_cis_up_2
-						#	trans_residues +=1
-						#else:
-							peptoid_coord = peptoid_cis_up
-						#else:
-						#		peptoid_coord = peptoid_cis_up
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_up.get(m)
-								else:
-									temp_coordinate = peptoid_coord.get(m)
-									if k == 'Nseh' and m == 'CG2':
-										print(temp_coordinate)
-										temp_coordinate = [3.743 ,  -1.841 , -2.766] 
-										print('Changing Nseh')
-										print(temp_coordinate)
-									
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
-							#if m == 'CG' and k == 'P':
-							#	coordinate[0] = 1.221
-							#	coordinate[1] = 0.000
-							#	coordinate[2] = 1.921
-							#elif m == 'CD' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = -0.870
-							#	coordinate[2] = 1.521
-							#else:
-							#	pass
-								print(i)
-								if (resid_num-1)%((len(sequence2))) == 0:
-									res_num_temp = 1
-									coordinate[0] = coordinate[0] + (res_num_temp)*2.900+start_pos+(q*2.9*(len(sequence2)-5))
-								else:
-									if i>loop_last-1:
-										coordinate[0] = coordinate[0] + (res_num_temp-6)*2.9+start_pos+(q*2.9*(len(sequence2)-5))
-									else:
-										coordinate[0] = coordinate[0] + (res_num_temp)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-								if i>loop_first-1:
-									print("Found Loop Region")
-									if i<loop_last:
-										coordinate[2] = coordinate[2] -15
-									else:
-										pass
-								coordinate[1] = coordinate[1] + r*4.5
-								#coordinate[2] = coordinate[2] + h*sheet_spacing
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								del coordinate[:]
-								total_atoms+=1
-						else:
-						#if i ==13:
-							check = random.randint(0, 100)
-						#if check < trans:
-						#	print("Placing cis amide at residue " + k)
-						#	peptoid_coord = peptoid_cis_down_2
-						#	trans_residues +=1
-						#else:
-							peptoid_coord = peptoid_cis_down
-						#else:
-						#	peptoid_coord = peptoid_cis_down
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_down.get(m)
-								else:
-									temp_coordinate = peptoid_coord.get(m)
-									if k == 'Nseh' and m == 'CG2':
-										print(temp_coordinate)
-										temp_coordinate = [7.103, 1.773, 4.836] 
-										print('Changing Nseh')
-										print(temp_coordinate)
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
-							#if m == 'N':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 1.450
-							#elif m == 'CA':
-							#	coordinate[1] = 0.000
-							#elif m == 'C':
-							#	coordinate[1] = -0.870
-							#elif m == 'O':
-							#	coordinate[1] = -2.090
-							#elif m == 'CG' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = -0.870
-							#	coordinate[2] = -1.521
-							#elif m == 'CD' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 0.870
-							#	coordinate[2] = -1.521
-							#else:
-							#	coordinate[1] = coordinate[1]*(-1) + 1.450
-							#	coordinate[2] = coordinate[2]*(-1)
-								if (resid_num-1)%((len(sequence2))) == 0:
-									res_num_temp = 1
-									coordinate[0] = coordinate[0] + (res_num_temp-1)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-								else:
-									if i>loop_last-1:
-										coordinate[0] = coordinate[0] + (res_num_temp-7)*2.9+start_pos+q*2.9*(len(sequence2)-5)
-									else:
-										coordinate[0] = coordinate[0] + (res_num_temp-1)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-								if i>loop_first-1:
-									print("Found Loop Region")
-									if i<loop_last:
-										coordinate[2] = coordinate[2] -15
-									else:
-										pass		
-								
-								coordinate[1] = coordinate[1] + r*4.5
-								#coordinate[2] = coordinate[2] + h*sheet_spacing
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(	res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'U'+str(total_chains).ljust(4, ' ')+ str(atom_type[l]).ljust(4,' ')+'\n')
-								del coordinate[:]
-								total_atoms+=1
-						if k == 'Hao':
-							resid_num +=3
-						else:
-							resid_num +=1
-							res_num_temp +=1
-					total_atoms2 = 0
-					total_chains+=1
-					for i,k in enumerate(sequence2):
-						res_name = writePdbAA.get(k)['Res_name']
-			
-						atoms = writePdbAA.get(k)['atoms']
-			
-						atom_type = writePdbAA.get(k)['atom_type']
-						sr = start_residue + i
-						if i%2 != 0:
-						#if i == 13:
-							check = random.randint(0, 100)
-						#if check < trans:
-						#	print("Placing Trans amide at residue " + k)
-						#	peptoid_coord = peptoid_cis_down_2
-						#	trans_residues+=1
-						#else:
-							peptoid_coord = peptoid_cis_down
-						#else:
-						#	peptoid_coord = peptoid_cis_down
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_down.get(m)
-								else:
-									temp_coordinate = peptoid_coord.get(m)
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
-							#if m == 'CG' and k == 'P':
-							#	coordinate[0] = 1.221
-							#	coordinate[1] = 0.000
-							#	coordinate[2] = 1.921
-							#elif m == 'CD' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = -0.870
-							#	coordinate[2] = 1.521
-							#else:
-							#	pass
-								if res_num_temp2 ==((len(sequence2)+1)):
-									res_num_temp2 = 1
-									coordinate[0] = coordinate[0] + (res_num_temp2-1)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-								
-								
-								else:
-									if i>loop_last-1:
-										coordinate[0] = coordinate[0] + (res_num_temp2-7)*2.9+start_pos+q*2.9*(len(sequence2)-5)
-									else:
-										coordinate[0] = coordinate[0] + (res_num_temp2-1)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-									if i>loop_first-1:
-										print("Found Loop Region")
-										if i<loop_last:
-											coordinate[2] = coordinate[2] -15
-										else:
-											pass
-									else:
-										pass
-									coordinate[2] = coordinate[2]*-1 + height_strands + h*sheet_spacing
-									coordinate[1] = coordinate[1]*-1 + r*4.5
-										
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								del coordinate[:]
-								total_atoms+=1
-						else:
-						#if i == 12:
-							check = random.randint(0, 100)
-						#if check < trans:
-						#	print("Placing Trans amide at residue " + k)
-						#	peptoid_coord = peptoid_cis_up_2
-						#	trans_residues+=1
-						#else:
-							peptoid_coord =  peptoid_cis_up
-						#else:
-						#	peptoid_coord =  peptoid_cis_up
-							for l,m in enumerate(atoms):
-								if k not in peptoids:
-									if k == 'Hao':
-										temp_coordinate = hao.get(m)
-									else:
-										temp_coordinate = atom_positions_beta_up.get(m)
-								else:
-									temp_coordinate = peptoid_coord.get(m)
-								for n,p in enumerate(temp_coordinate):
-									coordinate.append(p)
-							#if m == 'N':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 1.450
-							#elif m == 'CA':
-							#	coordinate[1] = 0.000
-							#elif m == 'C':
-							#	coordinate[1] = -0.870
-							#elif m == 'O':
-							#	coordinate[1] = -2.090
-							#elif m == 'CG' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = -0.870
-							#	coordinate[2] = -1.521
-							#elif m == 'CD' and k == 'P':
-							#	coordinate[0] = 0.000
-							#	coordinate[1] = 0.870
-							#	coordinate[2] = -1.521
-							#else:
-							#	coordinate[1] = coordinate[1]*(-1) + 1.450
-							#	coordinate[2] = coordinate[2]*(-1)
-								#if res_num_temp2 ==((len(sequence2)*length_strands)+1):
-								if res_num_temp2 ==(len(sequence2)+1):
-									res_num_temp2 = 1
-									coordinate[0] = coordinate[0] + (res_num_temp2)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-								else:
-									if i>loop_last-1:
-										coordinate[0] = coordinate[0] + (res_num_temp2-6)*2.9+start_pos+q*2.9*(len(sequence2)-5)
-									else:
-										coordinate[0] = coordinate[0] + (res_num_temp2)*2.900+start_pos+q*2.9*(len(sequence2)-5)
-									if i>loop_first-1:
-										print("Found Loop Region")
-										if i<loop_last:
-											coordinate[2] = coordinate[2] -15
-										else:
-											pass
-									else:
-										pass
-								coordinate[2] = coordinate[2]*-1 + height_strands + h*sheet_spacing
-								coordinate[1] = coordinate[1]*-1 + r*4.5
-								if atom_type[l] == 'Br' or atom_type[l] == 'Cl':
-									fobj.write('HETATM' + str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(3,' ')+ str(atom_type[l]).rjust(2,' ')+' '*3+ '\n')
-								elif k not in amino_acids:
-									fobj.write('HETATM' +  str(total_atoms).rjust(5,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								else:
-									fobj.write('ATOM' +  str(total_atoms).rjust(7,' ')+ '  ' + str(atoms[l]).ljust(4,' ') + str(res_name).strip().ljust(4,' ') + str(chain_ID).rjust(1,' ') + str(sr).rjust(4,' ')+ str(format(coordinate[0],'.3f')).rjust(12,' ') + str(format(coordinate[1],'.3f')).rjust(8,' ') + str(format(coordinate[2],'.3f')).rjust(8,' ')+ '  1.00 30.00' + ' '*6 + 'D'+str(total_chains2).ljust(4,' ') + str(atom_type[l]).ljust(4,' ')+ '\n')
-								del coordinate[:]
-								total_atoms+=1
-						
-						if k == 'Hao':
-							resid_num +=3
-						else:
-							resid_num +=1
-							res_num_temp2 +=1
-					total_atoms2 = 0
-					total_chains2+=1
-		print("Total trans residues " + str(trans_residues))
-		for q in range(0, length_strands*2*width_strands):
-			link = 0
-			for start,res in enumerate(sequence2):
-				atoms2 = writePdbAA.get(res)['atoms']
-				if res not in amino_acids:
-					link_rec = writePdbAA.get(res)['link_rec']
-					for x,y in enumerate(link_rec):
-						if len(y) > 2:
-							link1 = y[0] + total_atoms2
-							link2 = y[1] + total_atoms2
-							link3 = y[2] + total_atoms2
-							fobj.write('CONECT' + str(link1).rjust(5,' ') + str(link2).rjust(5, ' ') + str(link3).rjust(5, ' ') +'\n')
-						else:
-							link1 = y[0] + total_atoms2
-							link2 = y[1] + total_atoms2
-							fobj.write('CONECT' + str(link1).rjust(5,' ') + str(link2).rjust(5, ' ') + '\n')
-					if link < (len(sequence2)-1):
-						fobj.write('CONECT' + str(total_atoms2 + 3).rjust(5,' ') + str(total_atoms2 + len(atoms2)+1).rjust(5, ' ') + '\n')
-						link +=1
-					else:
-						pass
-					total_atoms2 = total_atoms2 + len(atoms2)
-				else:
-					total_atoms2 = total_atoms2 + len(atoms2)
-					link +=1
-		fobj.write('END')		
-		fobj.close()
-		
 		

@@ -1,6 +1,5 @@
 import re
 from main.fileImport import *
-from copy import deepcopy
 
 ipn = Import_Peptoid_Names()
 
@@ -34,7 +33,7 @@ class Mass_Spec_Calc(object):
 		self.sequence = sequence
     
 	def mol_formula(self,sequence):
-		carbons=0;hydrogens=0;nitrogens=0;oxygens=0;sulfurs=0;fluorines=0;chlorines=0;bromines=0;iodines=0
+		carbons=0;hydrogens=0;nitrogens=0;oxygens=0;sulfurs=0;fluorines=0;bromines=0;iodines=0
 		for i, n in enumerate(sequence):
 			carbons = carbons + exactMassAA.get(n)[0]
 			hydrogens = hydrogens + exactMassAA.get(n)[1]
@@ -42,17 +41,16 @@ class Mass_Spec_Calc(object):
 			oxygens = oxygens + exactMassAA.get(n)[3]
 			sulfurs = sulfurs + exactMassAA.get(n)[4]
 			fluorines = fluorines + exactMassAA.get(n)[5]
-			chlorines = chlorines + exactMassAA.get(n)[6]
-			bromines = bromines + exactMassAA.get(n)[7]
-			iodines = iodines + exactMassAA.get(n)[8]
-		return carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, chlorines,bromines, iodines
+			bromines = bromines + exactMassAA.get(n)[6]
+			iodines = iodines + exactMassAA.get(n)[7]
+		return carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, bromines, iodines
     
 	def exact_mass_calc(self, mol_form):
-		exact_mass = mol_form[0]*12.00000 + mol_form[1]*1.007825 + mol_form[2]*14.003074 + mol_form[3]*15.994915 + mol_form[4]*31.972072 + mol_form[5]*18.998403 +mol_form[6]*34.968852+ mol_form[7]*78.918336 + mol_form[8]*126.904477
+		exact_mass = mol_form[0]*12.00000 + mol_form[1]*1.007825 + mol_form[2]*14.003074 + mol_form[3]*15.994915 + mol_form[4]*31.972072 + mol_form[5]*18.998403 + mol_form[6]*78.918336 + mol_form[7]*126.904477
 		return exact_mass
 	
 	def molecular_weight(self, mol_form):
-		mol_weight = exact_mass = mol_form[0]*12.011 + mol_form[1]*1.0079 + mol_form[2]*14.0067 + mol_form[3]*15.9994 + mol_form[4]*32.065 + mol_form[5]*18.998403 + mol_form[6]*35.453 + mol_form[7]*79.904 + mol_form[8]*126.904477
+		mol_weight = exact_mass = mol_form[0]*12.011 + mol_form[1]*1.0079 + mol_form[2]*14.0067 + mol_form[3]*15.9994 + mol_form[4]*32.065 + mol_form[5]*18.998403 + mol_form[6]*79.904 + mol_form[7]*126.904477
 		return mol_weight
 		
 	def mass_spec_peaks(self, linear_mass, sequence):
@@ -61,65 +59,45 @@ class Mass_Spec_Calc(object):
 		i = 0; j = 0; k = 0; l = 1
 		masses = {}
 		mass_calc = 0
-		TFA_ester = sequence.count('S') + sequence.count('T') + sequence.count('Ser') + sequence.count('Thr')
+		print("Sequence Passed to mass_spec_peaks")
+		print(sequence)
 		for l in range(1,6):
 			for k in range (0,4):
 				for j in range (0,4):
 					for i in range (0,6):
 						if i==0 and j==0 and k==0:
 							mass_label = "Blank"
-							masses[0] = mass_label								
+							masses[0] = mass_label
 						else:
-							for p in range(0, TFA_ester+1):
-								mass_temp = ((linear_mass)*l+ 95.99012*p + i*H +j*Na +k*K)/(i+j+k)
-								mass_calc = float(format(mass_temp,'.5f'))
-								if mass_calc in masses:
-									pass
-								else:
-									if p == 0:
-										if i == 0 and j == 0 and k!=0:
-											mass_label = "[%sM + %sK]+%s" % (l,k,k)
-											masses[mass_calc] = mass_label
-										elif i == 0 and k == 0 and j !=0:
-											mass_label = "[%sM + %sNa]+%s"%(l,j,j)
-											masses[mass_calc] = mass_label
-										elif i != 0 and j == 0 and k == 0:
-											mass_label = "[%sM + %sH]+%s" %(l,i,i)
-											masses[mass_calc] = mass_label
-										elif i != 0 and j !=0 and k == 0:
-											mass_label = "[%sM + %sH + %sNa]+%s" %(l,i,j, i+j)
-											masses[mass_calc] = mass_label
-										elif i !=0 and j ==0 and k != 0:
-											mass_label = "[%sM + %sH + %sK]+%s" %(l,i,k, i+k)
-											masses[mass_calc] = mass_label
-										elif i ==0 and j !=0 and k != 0:
-											mass_label = "[%sM + %sNa + %sK]+%s" %(l,j,k, j+k)
-											masses[mass_calc] = mass_label
-										else:
-											mass_label = "[%sM + %sH +%sNa + %sK]+%s" %(l,i,j,k, i+j+k)
-											masses[mass_calc] = mass_label
-									else:
-										if i == 0 and j == 0 and k!=0:
-											mass_label = "[%sM + %sK + %sTFA ester]+%s" % (l,k,p,k)
-											masses[mass_calc] = mass_label
-										elif i == 0 and k == 0 and j !=0:
-											mass_label = "[%sM + %sNa + %sTFA ester]+%s"%(l,j,p,j)
-											masses[mass_calc] = mass_label
-										elif i != 0 and j == 0 and k == 0:
-											mass_label = "[%sM + %sH + %sTFA ester]+%s" %(l,i,p,i)
-											masses[mass_calc] = mass_label
-										elif i != 0 and j !=0 and k == 0:
-											mass_label = "[%sM + %sH + %sNa + %sTFA ester]+%s" %(l,i,j,p,i+j)
-											masses[mass_calc] = mass_label
-										elif i !=0 and j ==0 and k != 0:
-											mass_label = "[%sM + %sH + %sK + %sTFA ester]+%s" %(l,i,k,p,i+k)
-											masses[mass_calc] = mass_label
-										elif i ==0 and j !=0 and k != 0:
-											mass_label = "[%sM + %sNa + %sK + %sTFA ester]+%s" %(l,j,k,p,j+k)
-											masses[mass_calc] = mass_label
-										else:
-											mass_label = "[%sM + %sH +%sNa + %sK + %sTFA ester]+%s" %(l,i,j,k,p,i+j+k)
-											masses[mass_calc] = mass_label
+							mass_temp = ((linear_mass)*l+i*H +j*Na +k*K)/(i+j+k)
+							mass_calc = float(format(mass_temp,'.5f'))
+							#for q in range(0,len(sequence)-1):
+							#	s = exactMassAA.get(sequence[q])
+						#checks if key already exists
+						if mass_calc in masses:
+							pass
+						else:
+							if i == 0 and j == 0 and k!=0:
+								mass_label = "[%sM + %sK]+%s" % (l,k,k)
+								masses[mass_calc] = mass_label
+							elif i == 0 and k == 0 and j !=0:
+								mass_label = "[%sM + %sNa]+%s"%(l,j,j)
+								masses[mass_calc] = mass_label
+							elif i != 0 and j == 0 and k == 0:
+								mass_label = "[%sM + %sH]+%s" %(l,i,i)
+								masses[mass_calc] = mass_label
+							elif i != 0 and j !=0 and k == 0:
+								mass_label = "[%sM + %sH + %sNa]+%s" %(l,i,j, i+j)
+								masses[mass_calc] = mass_label
+							elif i !=0 and j ==0 and k != 0:
+								mass_label = "[%sM + %sH + %sK]+%s" %(l,i,k, i+k)
+								masses[mass_calc] = mass_label
+							elif i ==0 and j !=0 and k != 0:
+								mass_label = "[%sM + %sNa + %sK]+%s" %(l,j,k, j+k)
+								masses[mass_calc] = mass_label
+							else:
+								mass_label = "[%sM + %sH +%sNa + %sK]+%s" %(l,i,j,k, i+j+k)
+								masses[mass_calc] = mass_label
        
 		return masses
     
@@ -166,7 +144,10 @@ class Mass_Spec_Calc(object):
 		masses = {}
 		masses2={}
 		mass_calc = 0
-		print(sequence)
+		if 'S' or 'T' in sequence:
+			TFA_ester = sequence.count('S') + sequence.count('T')			
+		else:
+			pass
 		for l in range(1,2):
 			for k in range(0,3):
 				for j in range(0,3):
@@ -297,25 +278,31 @@ single_letter_AA = {'Ala' : 'A', 'Arg' : 'R', 'Asn' : 'N','Asp' : 'D','Cys' : 'C
                     'Alanme' : 'Ala(NMe)', 'Glynme' : 'Gly(NMe)','Ilenme' : 'Ile(NMe)', 'Leunme' : 'Leu(NMe)',
                     'Phenme' :  'Phe(NMe)', 'Valnme' : 'Val(NMe)','Ac' : 'Ac', 'Tfasalt' : 'TFA salt', 'Tfaester' : 'TFA ester',
                     'Nle' : 'Nle', 'Nva' : 'Nva', 'Chg' : 'Chg','Nlenme' : 'Nle(NMe)', 'Tyrnme' : 'Tyr(NMe)',
-					'Nvanme' : 'Nva(NMe)', 'Fmoc' : 'Fmoc', 'Disulfide' : 'Disulfide', 'Cha':'Cha', 'Tol':'Tol', 'Aib':'Aib'}
+					'Nvanme' : 'Nva(NMe)', 'Fmoc' : 'Fmoc', 'Disulfide' : 'Disulfide'}
 
-# List for residues {Name, [carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, chlorines, bromines, iodines]}
-exactMassAA = {'A' : [3,5,1,1,0,0,0,0,0], 'R' : [6,12,4,1,0,0,0,0,0], 'N' : [4,6,2,2,0,0,0,0,0], 'D' : [4,5,1,3,0,0,0,0,0],'C' : [3,5,1,1,1,0,0,0,0],
-               'E' : [5,7,1,3,0,0,0,0,0], 'Q' : [5,8,2,2,0,0,0,0,0],   'G' : [2,3,1,1,0,0,0,0,0], 'H' : [6,7,3,1,0,0,0,0,0],'I' : [6,11,1,1,0,0,0,0,0],
-               'L' : [6,11,1,1,0,0,0,0,0],'K' : [6,12,2,1,0,0,0,0,0],  'M' : [5,9,1,1,1,0,0,0,0], 'F' : [9,9,1,1,0,0,0,0,0],'P' : [5,7,1,1,0,0,0,0,0],
-               'S' : [3,5,1,2,0,0,0,0,0], 'T' : [4,7,1,2,0,0,0,0,0],   'W' : [11,10,2,1,0,0,0,0,0], 'Y': [9,9,1,2,0,0,0,0,0], 'V' : [5,9,1,1,0,0,0,0,0],
-               'OH' : [0,2,0,1,0,0,0,0,0], 'NH2' : [0,3,1,0,0,0,0,0,0], 'C-Term' : [0,3,1,1,0,0,0,0,0],'Cyclic' : [0,0,0,0,0,0,0,0,0], 'Phe(I)' : [9,8,1,1,0,0,0,0,1],
-			   'Phe(Br)' : [9,8,1,1,0,0,0,1,0], 'Phe(5F)' : [9,4,1,1,0,5,0,0,0],'O' :[5,10,2,1,0,0,0,0,0] ,'Hao' : [10,9,3,4,0,0,0,0,0], 'Ala(NMe)' : [4,7,1,1,0,0,0,0,0],
-			   'Gly(NMe)' : [3,5,1,1,0,0,0,0,0], 'Ile(NMe)' : [7,13,1,1,0,0,0,0,0], 'Leu(NMe)' : [7,13,1,1,0,0,0,0,0], 'Phe(NMe)' : [10,11,1,1,0,0,0,0,0],
-			   'Val(NMe)' : [6,11,1,1,0,0,0,0,0],'Ac' : [2,2,0,1,0,0,0,0,0] , 'TFA salt' : [2,1,0,2,0,3,0,0,0], 'TFA ester' : [2,0,0,1,0,3,0,0,0],
-			   'Nle' : [6,11,1,1,0,0,0,0,0], 'Nva' : [5,9,1,1,0,0,0,0,0], 'Chg' : [8,13,1,1,0,0,0,0,0],'Nle(NMe)' : [7,13,1,1,0,0,0,0,0], 'Tyr(NMe)' : [10,11,1,1,0,0,0,0,0],
-			   'Nva(NMe)' : [6,11,1,1,0,0,0,0,0], 'Fmoc' : [15,10,0,2,0,0,0,0,0], 'Disulfide' : [0,-2,0,0,0,0,0,0,0], 'Pra': [5,5,1,1,0,0,0,0,0], 'Cha':[9,15,1,1,0,0,0,0,0], 'Tol':[10,11,1,1,0,0,0,0,0], 'Aib':[4,7,1,1,0,0,0,0,0]}
+# List for residues {Name, [carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, bromines, iodines]}
+exactMassAA = {'A' : [3,5,1,1,0,0,0,0], 'R' : [6,12,4,1,0,0,0,0], 'N' : [4,6,2,2,0,0,0,0], 'D' : [4,5,1,3,0,0,0,0],'C' : [3,5,1,1,1,0,0,0],
+               'E' : [5,7,1,3,0,0,0,0], 'Q' : [5,8,2,2,0,0,0,0],   'G' : [2,3,1,1,0,0,0,0], 'H' : [6,7,3,1,0,0,0,0],'I' : [6,11,1,1,0,0,0,0],
+               'L' : [6,11,1,1,0,0,0,0],'K' : [6,12,2,1,0,0,0,0],  'M' : [5,9,1,1,1,0,0,0], 'F' : [9,9,1,1,0,0,0,0],'P' : [5,7,1,1,0,0,0,0],
+               'S' : [3,5,1,2,0,0,0,0], 'T' : [4,7,1,2,0,0,0,0],   'W' : [11,10,2,1,0,0,0,0], 'Y': [9,9,1,2,0,0,0,0], 'V' : [5,9,1,1,0,0,0,0],
+               'OH' : [0,2,0,1,0,0,0,0], 'NH2' : [0,3,1,0,0,0,0,0], 'C-Term' : [0,3,1,1,0,0,0,0],'Cyclic' : [0,0,0,0,0,0,0,0], 'Phe(I)' : [9,8,1,1,0,0,0,1],
+			   'Phe(Br)' : [9,8,1,1,0,0,1,0], 'Phe(5F)' : [9,4,1,1,0,5,0,0],'O' :[5,10,2,1,0,0,0,0] ,'Hao' : [10,9,3,4,0,0,0,0], 'Ala(NMe)' : [4,7,1,1,0,0,0,0],
+			   'Gly(NMe)' : [3,5,1,1,0,0,0,0], 'Ile(NMe)' : [7,13,1,1,0,0,0,0], 'Leu(NMe)' : [7,13,1,1,0,0,0,0], 'Phe(NMe)' : [10,11,1,1,0,0,0,0],
+			   'Val(NMe)' : [6,11,1,1,0,0,0,0],'Ac' : [2,2,0,1,0,0,0,0] , 'TFA salt' : [2,0,0,2,0,3,0,0], 'TFA ester' : [2,0,0,1,0,3,0,0],
+			   'Nle' : [5,9,1,1,0,0,0,0], 'Nva' : [5,9,1,1,0,0,0,0], 'Chg' : [8,13,1,1,0,0,0,0],'Nle(NMe)' : [7,13,1,1,0,0,0,0], 'Tyr(NMe)' : [10,11,1,1,0,0,0,0],
+			   'Nva(NMe)' : [6,11,1,1,0,0,0,0], 'Fmoc' : [15,11,1,2,0,0,0,0], 'Disulfide' : [0,-2,0,0,0,0,0,0], 'Pra': [5,5,1,1,0,0,0,0]}
 
-
+			   # Amino Acid : [atoms, links, x,y,z, x,y,z,atom2,
 
 					
 exactMassAA.update(ipn.get_peptoid_mass())
 		   
-
+#if not custom_masses:
+#	print('Custom Masses Dict is Empty')
+#	pass
+#else:
+#	print('Updating exactMassAA dict')
+#	exactMassAA.update(custom_masses)
+#	print (exactMassAA)
 
 

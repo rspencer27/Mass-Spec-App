@@ -34,7 +34,7 @@ class Mass_Spec_Calc(object):
 		self.sequence = sequence
     
 	def mol_formula(self,sequence):
-		carbons=0;hydrogens=0;nitrogens=0;oxygens=0;sulfurs=0;fluorines=0;chlorines=0;bromines=0;iodines=0
+		carbons=0;hydrogens=0;nitrogens=0;oxygens=0;sulfurs=0;fluorines=0;bromines=0;iodines=0
 		for i, n in enumerate(sequence):
 			carbons = carbons + exactMassAA.get(n)[0]
 			hydrogens = hydrogens + exactMassAA.get(n)[1]
@@ -42,17 +42,16 @@ class Mass_Spec_Calc(object):
 			oxygens = oxygens + exactMassAA.get(n)[3]
 			sulfurs = sulfurs + exactMassAA.get(n)[4]
 			fluorines = fluorines + exactMassAA.get(n)[5]
-			chlorines = chlorines + exactMassAA.get(n)[6]
-			bromines = bromines + exactMassAA.get(n)[7]
-			iodines = iodines + exactMassAA.get(n)[8]
-		return carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, chlorines,bromines, iodines
+			bromines = bromines + exactMassAA.get(n)[6]
+			iodines = iodines + exactMassAA.get(n)[7]
+		return carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, bromines, iodines
     
 	def exact_mass_calc(self, mol_form):
-		exact_mass = mol_form[0]*12.00000 + mol_form[1]*1.007825 + mol_form[2]*14.003074 + mol_form[3]*15.994915 + mol_form[4]*31.972072 + mol_form[5]*18.998403 +mol_form[6]*34.968852+ mol_form[7]*78.918336 + mol_form[8]*126.904477
+		exact_mass = mol_form[0]*12.00000 + mol_form[1]*1.007825 + mol_form[2]*14.003074 + mol_form[3]*15.994915 + mol_form[4]*31.972072 + mol_form[5]*18.998403 + mol_form[6]*78.918336 + mol_form[7]*126.904477
 		return exact_mass
 	
 	def molecular_weight(self, mol_form):
-		mol_weight = exact_mass = mol_form[0]*12.011 + mol_form[1]*1.0079 + mol_form[2]*14.0067 + mol_form[3]*15.9994 + mol_form[4]*32.065 + mol_form[5]*18.998403 + mol_form[6]*35.453 + mol_form[7]*79.904 + mol_form[8]*126.904477
+		mol_weight = exact_mass = mol_form[0]*12.011 + mol_form[1]*1.0079 + mol_form[2]*14.0067 + mol_form[3]*15.9994 + mol_form[4]*32.065 + mol_form[5]*18.998403 + mol_form[6]*79.904 + mol_form[7]*126.904477
 		return mol_weight
 		
 	def mass_spec_peaks(self, linear_mass, sequence):
@@ -297,19 +296,19 @@ single_letter_AA = {'Ala' : 'A', 'Arg' : 'R', 'Asn' : 'N','Asp' : 'D','Cys' : 'C
                     'Alanme' : 'Ala(NMe)', 'Glynme' : 'Gly(NMe)','Ilenme' : 'Ile(NMe)', 'Leunme' : 'Leu(NMe)',
                     'Phenme' :  'Phe(NMe)', 'Valnme' : 'Val(NMe)','Ac' : 'Ac', 'Tfasalt' : 'TFA salt', 'Tfaester' : 'TFA ester',
                     'Nle' : 'Nle', 'Nva' : 'Nva', 'Chg' : 'Chg','Nlenme' : 'Nle(NMe)', 'Tyrnme' : 'Tyr(NMe)',
-					'Nvanme' : 'Nva(NMe)', 'Fmoc' : 'Fmoc', 'Disulfide' : 'Disulfide', 'Cha':'Cha', 'Tol':'Tol', 'Aib':'Aib'}
+					'Nvanme' : 'Nva(NMe)', 'Fmoc' : 'Fmoc', 'Disulfide' : 'Disulfide'}
 
-# List for residues {Name, [carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, chlorines, bromines, iodines]}
-exactMassAA = {'A' : [3,5,1,1,0,0,0,0,0], 'R' : [6,12,4,1,0,0,0,0,0], 'N' : [4,6,2,2,0,0,0,0,0], 'D' : [4,5,1,3,0,0,0,0,0],'C' : [3,5,1,1,1,0,0,0,0],
-               'E' : [5,7,1,3,0,0,0,0,0], 'Q' : [5,8,2,2,0,0,0,0,0],   'G' : [2,3,1,1,0,0,0,0,0], 'H' : [6,7,3,1,0,0,0,0,0],'I' : [6,11,1,1,0,0,0,0,0],
-               'L' : [6,11,1,1,0,0,0,0,0],'K' : [6,12,2,1,0,0,0,0,0],  'M' : [5,9,1,1,1,0,0,0,0], 'F' : [9,9,1,1,0,0,0,0,0],'P' : [5,7,1,1,0,0,0,0,0],
-               'S' : [3,5,1,2,0,0,0,0,0], 'T' : [4,7,1,2,0,0,0,0,0],   'W' : [11,10,2,1,0,0,0,0,0], 'Y': [9,9,1,2,0,0,0,0,0], 'V' : [5,9,1,1,0,0,0,0,0],
-               'OH' : [0,2,0,1,0,0,0,0,0], 'NH2' : [0,3,1,0,0,0,0,0,0], 'C-Term' : [0,3,1,1,0,0,0,0,0],'Cyclic' : [0,0,0,0,0,0,0,0,0], 'Phe(I)' : [9,8,1,1,0,0,0,0,1],
-			   'Phe(Br)' : [9,8,1,1,0,0,0,1,0], 'Phe(5F)' : [9,4,1,1,0,5,0,0,0],'O' :[5,10,2,1,0,0,0,0,0] ,'Hao' : [10,9,3,4,0,0,0,0,0], 'Ala(NMe)' : [4,7,1,1,0,0,0,0,0],
-			   'Gly(NMe)' : [3,5,1,1,0,0,0,0,0], 'Ile(NMe)' : [7,13,1,1,0,0,0,0,0], 'Leu(NMe)' : [7,13,1,1,0,0,0,0,0], 'Phe(NMe)' : [10,11,1,1,0,0,0,0,0],
-			   'Val(NMe)' : [6,11,1,1,0,0,0,0,0],'Ac' : [2,2,0,1,0,0,0,0,0] , 'TFA salt' : [2,1,0,2,0,3,0,0,0], 'TFA ester' : [2,0,0,1,0,3,0,0,0],
-			   'Nle' : [6,11,1,1,0,0,0,0,0], 'Nva' : [5,9,1,1,0,0,0,0,0], 'Chg' : [8,13,1,1,0,0,0,0,0],'Nle(NMe)' : [7,13,1,1,0,0,0,0,0], 'Tyr(NMe)' : [10,11,1,1,0,0,0,0,0],
-			   'Nva(NMe)' : [6,11,1,1,0,0,0,0,0], 'Fmoc' : [15,10,0,2,0,0,0,0,0], 'Disulfide' : [0,-2,0,0,0,0,0,0,0], 'Pra': [5,5,1,1,0,0,0,0,0], 'Cha':[9,15,1,1,0,0,0,0,0], 'Tol':[10,11,1,1,0,0,0,0,0], 'Aib':[4,7,1,1,0,0,0,0,0]}
+# List for residues {Name, [carbons, hydrogens, nitrogens, oxygens, sulfurs, fluorines, bromines, iodines]}
+exactMassAA = {'A' : [3,5,1,1,0,0,0,0], 'R' : [6,12,4,1,0,0,0,0], 'N' : [4,6,2,2,0,0,0,0], 'D' : [4,5,1,3,0,0,0,0],'C' : [3,5,1,1,1,0,0,0],
+               'E' : [5,7,1,3,0,0,0,0], 'Q' : [5,8,2,2,0,0,0,0],   'G' : [2,3,1,1,0,0,0,0], 'H' : [6,7,3,1,0,0,0,0],'I' : [6,11,1,1,0,0,0,0],
+               'L' : [6,11,1,1,0,0,0,0],'K' : [6,12,2,1,0,0,0,0],  'M' : [5,9,1,1,1,0,0,0], 'F' : [9,9,1,1,0,0,0,0],'P' : [5,7,1,1,0,0,0,0],
+               'S' : [3,5,1,2,0,0,0,0], 'T' : [4,7,1,2,0,0,0,0],   'W' : [11,10,2,1,0,0,0,0], 'Y': [9,9,1,2,0,0,0,0], 'V' : [5,9,1,1,0,0,0,0],
+               'OH' : [0,2,0,1,0,0,0,0], 'NH2' : [0,3,1,0,0,0,0,0], 'C-Term' : [0,3,1,1,0,0,0,0],'Cyclic' : [0,0,0,0,0,0,0,0], 'Phe(I)' : [9,8,1,1,0,0,0,1],
+			   'Phe(Br)' : [9,8,1,1,0,0,1,0], 'Phe(5F)' : [9,4,1,1,0,5,0,0],'O' :[5,10,2,1,0,0,0,0] ,'Hao' : [10,9,3,4,0,0,0,0], 'Ala(NMe)' : [4,7,1,1,0,0,0,0],
+			   'Gly(NMe)' : [3,5,1,1,0,0,0,0], 'Ile(NMe)' : [7,13,1,1,0,0,0,0], 'Leu(NMe)' : [7,13,1,1,0,0,0,0], 'Phe(NMe)' : [10,11,1,1,0,0,0,0],
+			   'Val(NMe)' : [6,11,1,1,0,0,0,0],'Ac' : [2,2,0,1,0,0,0,0] , 'TFA salt' : [2,0,0,2,0,3,0,0], 'TFA ester' : [2,0,0,1,0,3,0,0],
+			   'Nle' : [5,9,1,1,0,0,0,0], 'Nva' : [5,9,1,1,0,0,0,0], 'Chg' : [8,13,1,1,0,0,0,0],'Nle(NMe)' : [7,13,1,1,0,0,0,0], 'Tyr(NMe)' : [10,11,1,1,0,0,0,0],
+			   'Nva(NMe)' : [6,11,1,1,0,0,0,0], 'Fmoc' : [15,11,1,2,0,0,0,0], 'Disulfide' : [0,-2,0,0,0,0,0,0], 'Pra': [5,5,1,1,0,0,0,0]}
 
 
 

@@ -43,42 +43,104 @@ class MassSpecApp(object):
 		label.grid(row=0, column=0)
 		label = tk.Label(root,
 								anchor="e", text="Sequence: ")
-		label.grid(row=2, column=1, padx=5,sticky=E)
+		label.grid(row=2, column=1, padx=5,sticky=E, rowspan=3)
+
+		global sequence_input_label
+
+		sequence_input_label = tk.Label(root,
+								anchor="e", text="",wraplength=500, justify=LEFT)
+		sequence_input_label.grid(row=2, column=2, padx=5,sticky=W, rowspan=3)
+
 		
 		label = tk.Label(root,
 								anchor="e", text="Molecular Formula: ")
 		label.grid(row=5, column=1, padx=5,sticky=E)
+
+		global mol_form_label_pretty
+
+		mol_form_label_pretty = tk.Label(root,
+						 anchor="e", text='')
+		mol_form_label_pretty.grid(row=5, column=2, padx=5, sticky=W)
 		
 		label = tk.Label(root,
 								anchor="e", text="Exact Mass: ")
 		label.grid(row=6, column=1, padx=5,sticky=E)
+
+		global exact_mass_label
+
+		exact_mass_label = tk.Label(root,
+						 anchor="e", text='')
+		exact_mass_label.grid(row=6, column=2, padx=5, sticky=W)
 		
 		label = tk.Label(root,
 								anchor="e", text="Molecular Weight: ")
 		label.grid(row=7, column=1, padx=5,sticky=E)
+
+		global mol_mass_label
+
+		mol_mass_label = tk.Label(root,
+						 anchor="e", text='')
+		mol_mass_label.grid(row=7, column=2, padx=5, sticky=W)
 		
 		label = tk.Label(root,
 								anchor="e", text="Mass Spec Match: ")
 		label.grid(row=8, column=1, padx=5,sticky=E)
+
+		global value_check_label
+
+		value_check_label = tk.Label(root,
+									 anchor="e", text='')
+		value_check_label.grid(row=8, column=2, padx=5, sticky=W)
 		
 		label = tk.Label(root,
 								anchor="e", text="Residues: ")
 		label.grid(row=9, column=1, padx=5,sticky=E)
+
+		global sequence_count_label
+
+		sequence_count_label = tk.Label(root,
+								anchor="e", text='', wraplength=500)
+		sequence_count_label.grid(row=9, column=2, padx=5,sticky=W)
 		
 		label = tk.Label(root,
 								anchor="e", text="Repeats: ")
 		label.grid(row=10, column=1, padx=5,sticky=E)
+
+		global mol_form_label
+
+		mol_form_label = tk.Label(root,
+								  anchor="w", pady=5, text='')
+		mol_form_label.grid(row=10, column=2, sticky=W)
 		
 		label = tk.Label(root,
 								anchor="e", text="Single Del or Add: ")
 		label.grid(row=11, column=1, padx=5,sticky=E)
+
+		global single_del_label
+
+		single_del_label = tk.Label(root,
+						 anchor="e", text='')
+		single_del_label.grid(row=11, column=2, padx=5, sticky=W)
+
 		label = tk.Label(root,
 								anchor="e", text="Other Matches: ")
 		label.grid(row=12, column=1, padx=5,sticky=E)
-		
+
+		global dd_del_label
+
+		dd_del_label = tk.Label(root,
+						  anchor="e", text='', wraplength=500, justify=LEFT)
+		dd_del_label.grid(row=12, column=2, padx=5, sticky=W)
+
 		label = tk.Label(root,
 								anchor="e", text=" "*200)
-		label.grid(row=1, column=2,rowspan =3)
+		label.grid(row=0, column=2,rowspan =3)
+
+		global quick_reference_label
+
+		quick_reference_label = tk.Label(root,
+						 anchor="e", text='', wraplength=475)
+		quick_reference_label.grid(row=15, column=2, padx=5, columnspan=2, sticky=W)
 		
 		self.check_mass = tk.Entry(root)
 		self.check_mass.grid(row=len(resin_choices)+3, column=0, pady=5, padx=5)
@@ -114,7 +176,7 @@ class MassSpecApp(object):
 		
 		pdbmenu = Menu(menubar, tearoff=0)
 		pdbmenu.add_command(label="Write Pdb file", command=onclick('Open PDB'))
-		#pdbmenu.add_command(label="Totally Tubular", command=onclick('Totally Tubular'))
+		pdbmenu.add_command(label="Totally Tubular", command=onclick('Totally Tubular'))
 		pdbmenu.add_command(label="What the Sheet?", command=onclick('What the Sheet'))
 		pdbmenu.add_command(label="Convert PDB to String", command=onclick('Convert PDB'))
 		menubar.add_cascade(label="Write to PDB", menu = pdbmenu)
@@ -236,21 +298,13 @@ class MassSpecApp(object):
 				
 				add_del = ', '.join(str(e) for e in check_val_add_del[0])
 				dd = ', '.join(str(e) for e in check_val_dd[0])
-			label = tk.Label(root,
-								anchor="e", text=check_value + ' '*50)
-			label.grid(row=8, column=2, padx=5,sticky=W)
-			label = tk.Label(root,
-								anchor="e", text=add_del + ' '*50)
-			label.grid(row=11, column=2, padx=5,sticky=W)
-			label4 = tk.Label(root,
-								anchor="e", text=' '*1500, wraplength=500, justify=LEFT)
-			label4.grid(row=13, column=2, padx=5,sticky=W)
-			label4 = tk.Label(root,
-								anchor="e", text=' '*1500, wraplength=500, justify=LEFT)
-			label4.grid(row=13, column=2, padx=5,sticky=W)
-			label4 = tk.Label(root,
-								anchor="e", text=' '*500 + dd + ' '*500, wraplength=500, justify=LEFT)
-			label4.grid(row=12, column=2, padx=5,sticky=W)
+			value_check_label.config(text=str(check_value))
+
+			single_del_label.config(text=str(add_del))
+
+			dd_del_label.config(text=str(dd))
+
+
 	
 			
 			
@@ -470,6 +524,58 @@ class buffer_subtract(object):
 					
 				fobjSubtract.close()	
 		return sample_sub
+class Write_nanotube(object):
+	def __init__(self, master, **kwargs):
+		top = Toplevel()
+		top.wm_title('Generate Nanotube')
+		label = tk.Label(top,
+					anchor = "w", padx=5, pady=5, text="Please Select Configuration")
+		label.grid(row = 0, column = 0, columnspan = 2)
+		options=[]
+		Choices = [("Parallel", "para"),
+				   ("Antiparallel-slip", "anti"),
+				   ("Compress", "compress"),
+				   ("Side", "side")]
+		sel = StringVar()
+		sel.set("para")
+		global tube_choice
+		tube_choice = ['para']
+		i=0
+		for text, choice in Choices:
+			radio = tk.Radiobutton(top, text=text, variable=sel, value=choice, command = self.write_tubes(choice))
+			radio.grid(row=i+1, column=1, padx=5, sticky=W)
+			options.append(radio)
+			i += 1
+		btn = tk.Button(top, text="Write Nanotube PDB", relief='raised',
+						command=self.write_tubes(choice='Write Tube'), state=tk.NORMAL)
+		btn.grid(row=6, column=0, columnspan=2,pady =5, padx =5)
+	def write_tubes(self, choice):
+		def tubes():
+			if choice == 'para':
+				tube_choice[0]='para'
+				print('You selected para')
+			elif choice == 'anti':
+				tube_choice[0]='anti'
+				print('You selected anti')
+			elif choice == 'compress':
+				tube_choice[0]='compress'
+				print('You selected compress')
+			elif choice == 'side':
+				tube_choice[0]='side'
+				print('You selected side')
+			elif choice == 'Write Tube':
+				if tube_choice[0] == 'para':
+					wPdb.write_totally_tubular_par(sequence_temp)
+				elif tube_choice[0] == 'anti':
+					wPdb.write_totally_tubular_slip_cis(sequence_temp)
+				elif tube_choice[0] == 'compress':
+					wPdb.write_totally_tubular_compress_cis_2(sequence_temp)
+				elif tube_choice[0] == 'side':
+					wPdb.write_totally_tubular_filled_cis(sequence_temp)
+			else:
+				pass
+				
+		return tubes
 
 class Write_nanosheet(object):
 	def __init__(self, master, **kwargs):
@@ -479,7 +585,8 @@ class Write_nanosheet(object):
 					anchor = "w", padx=5, pady=5, text="Please Enter Appropriate Values")
 		label.grid(row = 0, column = 0, columnspan = 2)
 		options=[]
-		Choices = [("Parallel", "para"),
+		Choices = [("Parallel-trans", "para-trans"),
+				   ("Parallel-cis", "para-cis"),
 				   ("Antiparallel", "anti"),
 				   ("Loopoid Anti", "loopoid_anti"),
 				   ("Loopoid Para", "loopoid_para")]
@@ -517,18 +624,27 @@ class Write_nanosheet(object):
 		label = tk.Label(top,
 					anchor = "w", padx=5, pady=5, text="Distance between monomer ends (ex. 5): ")
 		label.grid(row = 5, column = 0, sticky=E)
+		global trans
+		trans = tk.Entry(top, width = 7)
+		trans.grid(row=6, column=1, pady=5, padx=5)
+		label = tk.Label(top,
+					anchor = "w", padx=5, pady=5, text="Percent Trans? (ex. 20): ")
+		label.grid(row = 6, column = 0, sticky=E)
 		btn = tk.Button(top, text="Write Nanosheet PDB", relief='raised',
 						command=self.write_sheets(choice='Write Sheet'), state=tk.NORMAL)
-		btn.grid(row=6, column=0, columnspan=2,pady =5, padx =5)
+		btn.grid(row=7, column=0, columnspan=2,pady =5, padx =5)
 	
 	def write_sheets(self, choice):
 		def sheets():
-			if choice == 'para':
-				sheet_choice[0]='para'
-				print('You selected para')
+			if choice == 'para-trans':
+				sheet_choice[0]='para-trans'
+				print('You selected para-trans')
 			elif choice == 'anti':
 				sheet_choice[0]='anti'
 				print('You selected anti')
+			elif choice == 'para-cis':
+				sheet_choice[0]='para-cis'
+				print('You selected para-cis')
 			elif choice == 'loopoid_anti':
 				sheet_choice[0]='loopoid_anti'
 				print('You selected loopoid_anti')
@@ -540,18 +656,27 @@ class Write_nanosheet(object):
 				width=width_strands.get()
 				height=height_strands.get()
 				l_adjust = adjust_l.get()
+				percent_trans = trans.get()
 				if l_adjust == '':
 					l_adjust = 0
 				else:
 					pass
-				if sheet_choice[0] == 'para':
-					wPdb.what_the_sheet_par(sequence_temp,length,height,width, l_adjust)
+				if percent_trans =='':
+					percent_trans = 0
+				else:
+					pass
+				if sheet_choice[0] == 'para-cis':
+					wPdb.what_the_sheet_cis_par_2(sequence_temp,length,height,width, l_adjust, percent_trans)
+					#wPdb.what_the_sheet_cis_par(sequence_temp,length,height,width, l_adjust)
+				elif sheet_choice[0] == 'para-trans':
+					#wPdb.what_the_sheet_cis_par_2(sequence_temp,length,height,width, l_adjust, percent_trans)
+					wPdb.what_the_sheet_trans(sequence_temp,length,height,width, l_adjust)
 				elif sheet_choice[0] == 'anti':
 					wPdb.what_the_sheet_anti(sequence_temp,length,height,width, l_adjust)
 				elif sheet_choice[0] == 'loopoid_anti':
 					wPdb.what_the_sheet_loopoid_anti(sequence_temp,length,height,width, l_adjust)
 				elif sheet_choice[0] == 'loopoid_para':
-					wPdb.what_the_sheet_loopoid_par(sequence_temp,length,height,width, l_adjust)
+					wPdb.what_the_sheet_loopoid_par_2(sequence_temp,length,height,width, l_adjust)
 			else:
 				pass
 				
@@ -871,11 +996,13 @@ def onclick(k):
 		elif k == 'Convert PDB':
 			convert_PDB_to_string('top')
 		elif k == 'Totally Tubular':
-			wPdb.write_totally_tubular_compress(sequence_temp)
+			Write_nanotube('top')
+			#wPdb.write_totally_tubular_compress(sequence_temp)
 		elif k == 'What the Sheet':
 			Write_nanosheet('top')
 		elif k == 'Enter Sequence':
-			sequence_temp = sequence_temp + convert.sequence_to_list(enter_sequence.get())
+			print(enter_sequence.get().replace('-',''))
+			sequence_temp = sequence_temp + convert.sequence_to_list(enter_sequence.get().replace('-',''))
 		elif k == 'Print Report':
 			report.write_Report(sequence_temp,user_peaks)
 		elif k == 'Delete Last':
@@ -911,36 +1038,38 @@ def onclick(k):
 			while i>0:
 				del sequence_temp[i]
 				i -=1
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=1, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=2, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=3, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=4, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=9, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=10, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=11, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=12, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=13, column=2)
-			label = tk.Label(root,
-								anchor="e", text=' '*200)
-			label.grid(row=14, column=2)
+
+			sequence_input_label.config(text='')
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=1, column=2)
+			#label = tk.Label(root,
+		#						anchor="e", text=' '*200)
+			#label.grid(row=2, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=3, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=4, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=9, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=10, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=11, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=12, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=13, column=2)
+			#label = tk.Label(root,
+			#					anchor="e", text=' '*200)
+			#label.grid(row=14, column=2)
 			
 		elif k == 'Load Sequence':
 			fname = askopenfilename(filetypes=(("txt", "*.txt"),
@@ -988,33 +1117,25 @@ def onclick(k):
 		polymer = converted_sequence[1:]
 		p = dict((i,polymer.count(i)) for i in polymer)
 		polymer_nice = str(p)[1:-1]
-		mol_form_label = tk.Label(root,
-								anchor="w", pady=5, text=str(polymer_nice)+" "*60)
-		mol_form_label.grid(row=10, column=2, sticky=W)
+
+		mol_form_label.config(text=str(polymer_nice))
+
+
+		sequence_input_label.config(text=pretty_sequence)
+		#label = tk.Label(root,
+		#						anchor="e", text=pretty_sequence, wraplength=500, justify=LEFT)
+		#label.grid(row=1, column=2,sticky=W, rowspan=3)
+		mol_form_label_pretty.config(text=mol_formula_pretty)
+
+		exact_mass_label.config(text=exact_mass_formatted)
 		
-		label = tk.Label(root,
-								anchor="e", text=pretty_sequence, wraplength=500, justify=LEFT)
-		label.grid(row=1, column=2,sticky=W, rowspan=3)
+		mol_mass_label.config(text=mol_weight_formatted)
 		
-		label = tk.Label(root,
-								anchor="e", text=mol_formula_pretty + ' '*100)
-		label.grid(row=5, column=2, padx=5,sticky=W)
+		sequence_count_label.config(text=sequence_count)
 		
-		label = tk.Label(root,
-								anchor="e", text=exact_mass_formatted + ' '*100)
-		label.grid(row=6, column=2, padx=5,sticky=W)
+		quick_reference_label.config(text=quick_reference)
 		
-		label = tk.Label(root,
-								anchor="e", text=mol_weight_formatted + ' '*100)
-		label.grid(row=7, column=2, padx=5,sticky=W)
-		
-		label = tk.Label(root,
-								anchor="e", text=sequence_count + ' '*100, wraplength=500)
-		label.grid(row=9, column=2, padx=5,sticky=W)
-		
-		label = tk.Label(root,
-								anchor="e", text=quick_reference, wraplength = 475)
-		label.grid(row=15, column=2, padx=5,  columnspan=2, sticky=W)
+
 		
 	
 	return click

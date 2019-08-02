@@ -1,8 +1,8 @@
-import sys
+#import sys
 import os.path
-from main.massCalc import *
-from main.molFormula import *
-from main.fileImport import Import_Peptoid_Names
+#from main.massCalc import *
+#from main.molFormula import *
+#from main.fileImport import Import_Peptoid_Names
 from main.writePdb import *
 from main.printReport import *
 from main.remove_neg_log import *
@@ -11,6 +11,18 @@ import tkinter as tk
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 from tkinter.filedialog import asksaveasfilename
+import numpy as np
+import matplotlib
+matplotlib.use('TKAgg',warn=False, force=True)
+#matplotlib.use("TkAgg")
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+#import matplotlib.animation as animation
+#from matplotlib import style
+#from matplotlib.figure import Figure
+#from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+
 
 
 #written by Ryan K. Spencer
@@ -969,12 +981,95 @@ class add_custom_buttons(object):
 		popup.mainloop()
 		
 	
-sequence_temp=['Acid']			
+sequence_temp=['Acid']
+
+def generate_mass_spec_spectrum(formula, mass):
+	print(formula)
+	print(mass)
+	data_x = []
+	data_y = []
+	data_y_temp=[]
+	carbon_abundance = 0.9889
+	heavy_carbon = 0.0111
+	#i = 0
+	charge = 1
+	H = 1.007825
+	Na = 22.989770
+	K = 38.963708
+	while charge < 6:
+		data_y_temp = []
+		i=0
+		while i < 10:
+			data_x.append((exact_mass+charge*H+i)/charge-1/(charge*2))
+			data_y.append(0)
+			data_x.append(((exact_mass+charge*H+i)/charge))
+			if i == 0:
+				data_y.append(carbon_abundance**(formula[0]-i))
+				data_y_temp.append(carbon_abundance**(formula[0]-i))
+			else:
+				data_y_temp.append(data_y_temp[i - 1] * ((formula[0] - i) / i) * (heavy_carbon / carbon_abundance))
+				data_y.append(data_y_temp[i-1]*((formula[0]-i)/i)*(heavy_carbon/carbon_abundance))
+
+			data_x.append((exact_mass+charge*H+i)/charge +1/(charge*2))
+			data_y.append(0)
+			i+=1
+		charge+=1
+	print(np.amax(data_y))
+	print(data_y)
+	if formula[0] < 2:
+		pass
+	else:
+
+		data_y_adjusted = data_y/np.amax(data_y)
+
+		fig = plt.Figure(figsize=(10, 5))
+		ax2 = fig.add_subplot(111)
+		canvas = FigureCanvasTkAgg(fig, master=root)
+		canvas.get_tk_widget().grid(column=1, row=17, columnspan=5)
+		toolbarFrame = Frame(master=root)
+		toolbarFrame.grid(row=16, column=2, columnspan=4, sticky='w')
+		toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
+		#label = tk.Label(root,
+		#				 anchor="w", text=" "*30)
+		#label.grid(row=18, column=2, columnspan=5)
+		#toolbar.grid(row=18, column=2, columnspan=4)
+		ax2.cla()
+		ax2.set_xlabel('mass units')
+		ax2.set_ylabel('arbitrary units')
+		ax2.plot(data_x, data_y_adjusted)
+		for i, txt in enumerate(data_x):
+			if data_y_adjusted[i] > 0.2:
+				ax2.annotate("%0.4f" % txt, (data_x[i]-0.1, data_y_adjusted[i]+0.05))
+		ax2.relim()
+		ax2.autoscale_view()
+		ax2.set_ylim(0,1.2)
+		# print("Plotting Pressure")
+		#plt.show()
+		# ax2.clear()
+		# ax2.plot(xs, ys)
+		# ax2.set_xlabel('Time (minutes)')
+		# ax2.set_ylabel('UV Abs')
+		# ax2.set_ylim([float(min_y)-20,float(max_y)+20])
+		# fig.canvas.draw()
+		# canvas.draw()
+		# fig.canvas.flush_events()
+		fig.canvas.draw_idle()
+		fig.canvas.flush_events()
+
+
+	#plt.plot(data_x, data_y_adjusted)
+	#plt.show()
+
+
+
+
+
 
 
 def onclick(k):
 	def click():
 		global sequence_temp
+		global sequence_input_label
 		if k == 'Chlorotrityl' or k == 'Wang' or k == 'Expressed':
 			sequence_temp[0] = 'Acid'
 		elif k == 'Rink':
@@ -1009,18 +1104,20 @@ def onclick(k):
 			i = len(sequence_temp)-1
 			if i>0:
 				del sequence_temp[i]
-				label = tk.Label(root,
-								anchor="e", text=' '*200)
-				label.grid(row=1, column=2)
-				label = tk.Label(root,
-								anchor="e", text=' '*200)
-				label.grid(row=2, column=2)
-				label = tk.Label(root,
-								anchor="e", text=' '*200)
-				label.grid(row=3, column=2)
-				label = tk.Label(root,
-								anchor="e", text=' '*200)
-				label.grid(row=4, column=2)
+				sequence_input_label.config(text=sequence_temp)
+
+				#label = tk.Label(root,
+				#				anchor="e", text=' '*200)
+				#label.grid(row=1, column=2)
+				#label = tk.Label(root,
+				#				anchor="e", text=' '*200)
+				#label.grid(row=2, column=2)
+				#label = tk.Label(root,
+				#				anchor="e", text=' '*200)
+				#label.grid(row=3, column=2)
+				#label = tk.Label(root,
+				#				anchor="e", text=' '*200)
+				#label.grid(row=4, column=2)
 			else:
 				pass
 		elif k == 'Save Sequence':
@@ -1092,6 +1189,8 @@ def onclick(k):
 		
 		mol_formula = list(mass_spec_calc.mol_formula(converted_sequence))
 
+		print(mol_formula)
+
 		pretty_mol_formula = pretty_formula.make_pretty(mol_formula)
 		
 		pretty_sequence = '-'.join(str(e) for e in converted_sequence[1:])
@@ -1108,6 +1207,9 @@ def onclick(k):
 		
 		mol_weight = mass_spec_calc.molecular_weight(mol_formula)
 		mol_weight_formatted = str(format(mol_weight,'.5f'))
+
+		generate_mass_spec_spectrum(mol_formula,exact_mass)
+
 		count = -1
 		for i in sequence_temp:
 			count +=1
@@ -1156,6 +1258,6 @@ except:
 
 root = Tk()
 
-app = MassSpecApp(root, title='Mass Spec Calc v1.4')
-root.wm_title("Ultimate Awesome of Awesomeness Mass Spec. Calc. + Builder v1.4")
+app = MassSpecApp(root, title='Mass Spec Calc v1.5')
+root.wm_title("Ultimate Awesome of Awesomeness Mass Spec. Calc. + Builder v1.5")
 root.mainloop()

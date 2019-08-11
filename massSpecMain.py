@@ -16,12 +16,16 @@ import matplotlib
 matplotlib.use('TKAgg',warn=False, force=True)
 #matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+#from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+import matplotlib.backends.backend_tkagg as tkagg
 #import matplotlib.animation as animation
 #from matplotlib import style
 #from matplotlib.figure import Figure
 #from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+#from scipy.stats import gaussian_kde
+
+
 
 
 
@@ -983,6 +987,10 @@ class add_custom_buttons(object):
 	
 sequence_temp=['Acid']
 
+
+#def _1gaussian(x, amp1,cen1,sigma1):
+#    return amp1*(1/(sigma1*(np.sqrt(2*np.pi))))*(np.exp(-((x-cen1)**2)/((2*sigma1)**2)))
+
 def generate_mass_spec_spectrum(formula, mass):
 	print(formula)
 	print(mass)
@@ -991,6 +999,18 @@ def generate_mass_spec_spectrum(formula, mass):
 	data_y_temp=[]
 	carbon_abundance = 0.9889
 	heavy_carbon = 0.0111
+	bromine_abundance = 50.69
+	bromine_heavy = 49.31
+	chlorine_abundance = 0.7577
+	chlorine_heavy = 0.2423
+	nitrogen_abundance = 0.9964
+	heavy_nitrogen = 0.0036
+	oxygen_abundance=0.9976
+	heavy_oxygen=0.002
+	sulfur_abundance=0.95
+	sulfur_heavy=0.0422
+
+
 	#i = 0
 	charge = 1
 	H = 1.007825
@@ -998,37 +1018,226 @@ def generate_mass_spec_spectrum(formula, mass):
 	K = 38.963708
 	while charge < 6:
 		data_y_temp = []
+		data_y_carbon=[]
+		data_y_nitrogen = []
+		data_y_oxygen = []
+		data_x_temp =[]
 		i=0
-		while i < 10:
-			data_x.append((exact_mass+charge*H+i)/charge-1/(charge*2))
-			data_y.append(0)
-			data_x.append(((exact_mass+charge*H+i)/charge))
-			if i == 0:
-				data_y.append(carbon_abundance**(formula[0]-i))
-				data_y_temp.append(carbon_abundance**(formula[0]-i))
-			else:
-				data_y_temp.append(data_y_temp[i - 1] * ((formula[0] - i) / i) * (heavy_carbon / carbon_abundance))
-				data_y.append(data_y_temp[i-1]*((formula[0]-i)/i)*(heavy_carbon/carbon_abundance))
+		while i < 20:
+			#data_x.append((exact_mass+charge*H+i)/charge-1/(charge*10))
+			data_x_temp.append((exact_mass + charge * H + i) / charge - 1/15)
+			data_y_temp.append(0.0)
+			data_x_temp.append(((exact_mass+charge*H+i)/charge))
+			#x = (exact_mass+charge*H+i)/(charge)
 
-			data_x.append((exact_mass+charge*H+i)/charge +1/(charge*2))
-			data_y.append(0)
+
+			#print(_1gaussian(x, 10, x+10, 0.5))
+
+			if i == 0:
+				data_y_temp.append(carbon_abundance**(formula[0]+1-i))
+				data_y_carbon.append(carbon_abundance**(formula[0]+1-i))
+				data_y_nitrogen.append(carbon_abundance ** (formula[2] + 1 - i))
+				data_y_oxygen.append(carbon_abundance ** (formula[3] + 1 - i))
+			else:
+				data_y_carbon.append(data_y_carbon[i - 1] * ((formula[0]+1 - i) / i) * (heavy_carbon / carbon_abundance))
+				data_y_temp.append(data_y_carbon[i-1]*((formula[0]+1-i)/i)*(heavy_carbon/carbon_abundance))
+
+			#data_x.append((exact_mass+charge*H+i)/charge +1/(charge*10))
+			data_x_temp.append((exact_mass + charge * H + i) / charge + 1 /15)
+			data_y_temp.append(0.0)
 			i+=1
+
+		if formula[6] > 0 and formula[7] == 0:
+			#print('Doing some crazy chlorine stuff')
+			i=0
+			chlorine_prob=[]
+			data_y_temp = []
+			data_x_temp = []
+			while i < 20:
+				if i == 0:
+					chlorine_prob.append(chlorine_abundance ** (formula[6] + 1 - i))
+				else:
+					chlorine_prob.append(chlorine_prob[i-1]*((formula[6]+1 - i) / i) * (chlorine_heavy / chlorine_abundance))
+				i+=1
+			chlorine_contribution=[]
+			#print(chlorine_prob)
+			for i,k in enumerate(chlorine_prob):
+				#print(k)
+				if k > 0.0:
+					#print(i)
+					chlorine_temp=[]
+					jump=0
+					for j,l in enumerate(data_y_carbon):
+						if i == 0:
+							chlorine_temp.append(l*k)
+						else:
+							while jump < i:
+								chlorine_temp.append(0)
+								chlorine_temp.append(0)
+								jump+=1
+							if i*2 + j < 20:
+								chlorine_temp.append(l * k)
+					chlorine_contribution.append(chlorine_temp)
+			#print(np.sum(chlorine_contribution, axis=0))
+			final_chlorine = np.sum(chlorine_contribution, axis=0)
+			for i,k in enumerate(final_chlorine):
+				data_x_temp.append((exact_mass + charge * H + i) / charge - 1 / 15)
+				data_y_temp.append(0.0)
+				data_x_temp.append(((exact_mass + charge * H + i) / charge))
+				data_y_temp.append(k/np.amax(final_chlorine))
+				data_x_temp.append((exact_mass + charge * H + i) / charge + 1 / 15)
+				data_y_temp.append(0.0)
+			data_y += data_y_temp
+			data_x += data_x_temp
+
+
+		elif formula[7] > 0 and formula[6] == 0:
+			#print('Doing some crazy bromine stuff')
+			i=0
+			bromine_prob=[]
+			data_y_temp = []
+			data_x_temp = []
+			while i < 20:
+				if i == 0:
+					bromine_prob.append(bromine_abundance ** (formula[7] + 1 - i))
+				else:
+					bromine_prob.append(bromine_prob[i-1]*((formula[7]+1 - i) / i) * (bromine_heavy / bromine_abundance))
+				i+=1
+			bromine_contribution=[]
+			#print(bromine_prob)
+			for i,k in enumerate(bromine_prob):
+				#print(k)
+				if k > 0.0:
+					#print(i)
+					bromine_temp=[]
+					jump=0
+					for j,l in enumerate(data_y_carbon):
+						if i == 0:
+							bromine_temp.append(l*k)
+						else:
+							while jump < i:
+								bromine_temp.append(0)
+								bromine_temp.append(0)
+								jump+=1
+							if i*2 + j < 20:
+								bromine_temp.append(l * k)
+					bromine_contribution.append(bromine_temp)
+			#print(np.sum(bromine_contribution, axis=0))
+			final_bromine = np.sum(bromine_contribution, axis=0)
+			for i,k in enumerate(final_bromine):
+				data_x_temp.append((exact_mass + charge * H + i) / charge - 1 / 15)
+				data_y_temp.append(0.0)
+				data_x_temp.append(((exact_mass + charge * H + i) / charge))
+				data_y_temp.append(k/np.amax(final_bromine))
+				data_x_temp.append((exact_mass + charge * H + i) / charge + 1 / 15)
+				data_y_temp.append(0.0)
+			data_y += data_y_temp
+			data_x += data_x_temp
+
+		elif formula[6] > 0 and formula[7] > 0:
+			#print('Doing some crazy chlorine and bromine stuff')
+			i=0
+			chlorine_prob=[]
+			bromine_prob = []
+			data_y_temp = []
+			data_x_temp = []
+			while i < 20:
+				if i == 0:
+					chlorine_prob.append(chlorine_abundance ** (formula[6] + 1 - i))
+					bromine_prob.append(bromine_abundance ** (formula[7] + 1 - i))
+				else:
+					chlorine_prob.append(chlorine_prob[i-1]*((formula[6]+1 - i) / i) * (chlorine_heavy / chlorine_abundance))
+					bromine_prob.append(
+						bromine_prob[i - 1] * ((formula[7] + 1 - i) / i) * (bromine_heavy / bromine_abundance))
+
+				i+=1
+			chlorine_contribution=[]
+			bromine_contribution=[]
+			for i,k in enumerate(chlorine_prob):
+				#print(k)
+				if k > 0.0:
+					#print(i)
+					chlorine_temp=[]
+					jump=0
+					for j,l in enumerate(data_y_carbon):
+						if i == 0:
+							chlorine_temp.append(l*k)
+						else:
+							while jump < i:
+								chlorine_temp.append(0)
+								chlorine_temp.append(0)
+								jump+=1
+							if i*2 + j < 20:
+								chlorine_temp.append(l * k)
+					chlorine_contribution.append(chlorine_temp)
+			#print(np.sum(chlorine_contribution, axis=0))
+			final_chlorine = np.sum(chlorine_contribution, axis=0)
+			for i,k in enumerate(bromine_prob):
+				if k > 0.0:
+					#print(i)
+					bromine_temp=[]
+					jump=0
+					for j,l in enumerate(final_chlorine):
+						if i == 0:
+							bromine_temp.append(l*k)
+						else:
+							while jump < i:
+								bromine_temp.append(0)
+								bromine_temp.append(0)
+								jump+=1
+							if i*2 + j < 20:
+								bromine_temp.append(l * k)
+					bromine_contribution.append(bromine_temp)
+			#print(np.sum(bromine_contribution, axis=0))
+			final_bromine = np.sum(bromine_contribution, axis=0)
+			for i,k in enumerate(final_bromine):
+				data_x_temp.append((exact_mass + charge * H + i) / charge - 1 / 15)
+				data_y_temp.append(0.0)
+				data_x_temp.append(((exact_mass + charge * H + i) / charge))
+				data_y_temp.append(k/np.amax(final_bromine))
+				data_x_temp.append((exact_mass + charge * H + i) / charge + 1 / 15)
+				data_y_temp.append(0.0)
+			data_y += data_y_temp
+			data_x += data_x_temp
+		else:
+			data_y += data_y_temp
+			data_x += data_x_temp
+
 		charge+=1
-	print(np.amax(data_y))
-	print(data_y)
+	#print(data_y_temp)
+
+	#print(np.amax(data_y))
+	#print(data_y)
+	#data_x_np = np.array(data_x)
+	#data_y_np = np.array(data_y)
 	if formula[0] < 2:
 		pass
 	else:
+		#xnew = np.linspace(data_x_np.min(), data_x_np.max(), 300)  # 300 represents number of points to make between T.min and T.max
+
+
 
 		data_y_adjusted = data_y/np.amax(data_y)
+		#ysmoothed = gaussian_filter1d(data_y_adjusted, sigma=0.5)
 
-		fig = plt.Figure(figsize=(10, 5))
+		#power_smooth = spline(data_x_np, data_y_adjusted, xnew)
+
+		# generated a density class
+		#density = gaussian_kde(data_y_adjusted)
+
+		# set the covariance_factor, lower means more detail
+		#density.covariance_factor = lambda: .25
+		#density._compute_covariance()
+		#ys = density(data_x_np)
+
+		fig = plt.Figure(figsize=(10, 4))
 		ax2 = fig.add_subplot(111)
 		canvas = FigureCanvasTkAgg(fig, master=root)
 		canvas.get_tk_widget().grid(column=1, row=17, columnspan=5)
+		fig.canvas.flush_events()
 		toolbarFrame = Frame(master=root)
 		toolbarFrame.grid(row=16, column=2, columnspan=4, sticky='w')
-		toolbar = NavigationToolbar2Tk(canvas, toolbarFrame)
+		tkagg.NavigationToolbar2Tk(canvas, toolbarFrame)
 		#label = tk.Label(root,
 		#				 anchor="w", text=" "*30)
 		#label.grid(row=18, column=2, columnspan=5)
@@ -1037,9 +1246,10 @@ def generate_mass_spec_spectrum(formula, mass):
 		ax2.set_xlabel('mass units')
 		ax2.set_ylabel('arbitrary units')
 		ax2.plot(data_x, data_y_adjusted)
+		#ax2.plot(xnew, power_smooth)
 		for i, txt in enumerate(data_x):
-			if data_y_adjusted[i] > 0.2:
-				ax2.annotate("%0.4f" % txt, (data_x[i]-0.1, data_y_adjusted[i]+0.05))
+			if data_y_adjusted[i] > 0.1:
+				ax2.annotate("%0.4f" % txt, (data_x[i]-0.15, data_y_adjusted[i]+0.05))
 		ax2.relim()
 		ax2.autoscale_view()
 		ax2.set_ylim(0,1.2)
@@ -1054,7 +1264,7 @@ def generate_mass_spec_spectrum(formula, mass):
 		# canvas.draw()
 		# fig.canvas.flush_events()
 		fig.canvas.draw_idle()
-		fig.canvas.flush_events()
+
 
 
 	#plt.plot(data_x, data_y_adjusted)
